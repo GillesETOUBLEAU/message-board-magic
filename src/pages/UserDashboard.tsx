@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -79,8 +78,8 @@ const UserDashboard = () => {
       return;
     }
 
-    if (newMessage.length > 100) {
-      toast.error("Message too long! Keep it to one sentence.");
+    if (newMessage.length > 200) {
+      toast.error("Message too long! Keep it under 200 characters.");
       return;
     }
 
@@ -172,7 +171,7 @@ const UserDashboard = () => {
                 <Send className="h-5 w-5" />
                 Send Message
               </CardTitle>
-              <p className="text-sm text-gray-600">Share your thoughts (max 1 sentence)</p>
+              <p className="text-sm text-gray-600">Share your thoughts (max 200 characters)</p>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSendMessage} className="space-y-4">
@@ -180,12 +179,12 @@ const UserDashboard = () => {
                   placeholder="What's on your mind?"
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
-                  maxLength={100}
+                  maxLength={200}
                   rows={3}
                 />
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-500">
-                    {newMessage.length}/100 characters
+                    {newMessage.length}/200 characters
                   </span>
                   <Button type="submit" className="bg-green-600 hover:bg-green-700">
                     <Send className="h-4 w-4 mr-2" />
