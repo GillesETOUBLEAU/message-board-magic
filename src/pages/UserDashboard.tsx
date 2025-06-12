@@ -6,43 +6,49 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Send, MessageSquare } from 'lucide-react';
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Message {
   id: string;
   content: string;
-  author: string;
-  timestamp: Date;
+  author_name: string;
+  author_email: string;
   status: 'pending' | 'approved' | 'rejected';
+  created_at: string;
 }
 
 const UserDashboard = () => {
   const [user, setUser] = useState<{ name: string; email: string } | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
-  const [isLogin, setIsLogin] = useState(true);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
 
   useEffect(() => {
     const savedUser = localStorage.getItem('workshop-user');
     if (savedUser) {
-      setUser(JSON.parse(savedUser));
-      loadUserMessages(JSON.parse(savedUser).email);
+      const userData = JSON.parse(savedUser);
+      setUser(userData);
+      loadUserMessages(userData.email);
     }
   }, []);
 
-  const loadUserMessages = (userEmail: string) => {
-    const savedMessages = localStorage.getItem('workshop-messages');
-    if (savedMessages) {
-      const allMessages = JSON.parse(savedMessages);
-      const userMessages = allMessages.filter((msg: Message) => 
-        msg.author === userEmail
-      );
-      setMessages(userMessages);
+  const loadUserMessages = async (userEmail: string) => {
+    const { data, error } = await supabase
+      .from('messages')
+      .select('*')
+      .eq('author_email', userEmail)
+      .order('created_at', { ascending: false });
+    
+    if (error) {
+      console.error('Error loading messages:', error);
+      return;
     }
+    
+    setMessages(data || []);
   };
 
-  const handleAuth = (e: React.FormEvent) => {
+  const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !email.trim()) {
       toast.error("Please fill in all fields");
@@ -52,11 +58,21 @@ const UserDashboard = () => {
     const userData = { name, email };
     setUser(userData);
     localStorage.setItem('workshop-user', JSON.stringify(userData));
+    
+    // Store user in workshop_users table
+    const { error } = await supabase
+      .from('workshop_users')
+      .upsert({ name, email }, { onConflict: 'email' });
+    
+    if (error) {
+      console.error('Error storing user:', error);
+    }
+    
     loadUserMessages(email);
     toast.success("Welcome to the workshop!");
   };
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newMessage.trim()) {
       toast.error("Please enter a message");
@@ -68,20 +84,22 @@ const UserDashboard = () => {
       return;
     }
 
-    const message: Message = {
-      id: Date.now().toString(),
-      content: newMessage,
-      author: user!.email,
-      timestamp: new Date(),
-      status: 'pending'
-    };
+    const { error } = await supabase
+      .from('messages')
+      .insert({
+        content: newMessage,
+        author_name: user!.name,
+        author_email: user!.email,
+        status: 'pending'
+      });
 
-    const savedMessages = localStorage.getItem('workshop-messages');
-    const allMessages = savedMessages ? JSON.parse(savedMessages) : [];
-    allMessages.push(message);
-    localStorage.setItem('workshop-messages', JSON.stringify(allMessages));
+    if (error) {
+      console.error('Error sending message:', error);
+      toast.error("Failed to send message");
+      return;
+    }
 
-    setMessages(prev => [...prev, message]);
+    loadUserMessages(user!.email);
     setNewMessage('');
     toast.success("Message sent for review!");
   };
@@ -206,7 +224,7 @@ const UserDashboard = () => {
                       <p className="text-sm">{message.content}</p>
                       <div className="flex justify-between items-center mt-2">
                         <span className="text-xs text-gray-500">
-                          {message.timestamp.toLocaleString()}
+                          {new Date(message.created_at).toLocaleString()}
                         </span>
                         <span
                           className={`text-xs px-2 py-1 rounded-full ${
