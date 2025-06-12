@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 
@@ -86,28 +87,30 @@ const Projection = () => {
     return settings.sticky_note_colors[Math.floor(Math.random() * settings.sticky_note_colors.length)];
   };
 
-  const getRandomPosition = (index: number) => {
-    // Create a grid-like distribution with some randomness
-    const cols = 4;
-    const rows = Math.ceil(displayedMessages.length / cols);
+  const getGridPosition = (index: number) => {
+    // Calculate grid dimensions based on total number of messages
+    const totalMessages = displayedMessages.length;
+    const cols = Math.ceil(Math.sqrt(totalMessages * 1.5)); // Slightly wider than square
+    const rows = Math.ceil(totalMessages / cols);
+    
+    // Calculate position in grid
     const col = index % cols;
     const row = Math.floor(index / cols);
     
-    const baseX = (col * 25) + 10; // Base grid position
-    const baseY = (row * 20) + 15;
+    // Center the grid on the screen
+    const gridWidth = cols * 280; // 280px per column (card width + margin)
+    const gridHeight = rows * 180; // 180px per row (card height + margin)
     
-    // Add some randomness
-    const randomX = baseX + (Math.random() - 0.5) * 10;
-    const randomY = baseY + (Math.random() - 0.5) * 8;
+    const startX = (100 - (gridWidth / window.innerWidth * 100)) / 2;
+    const startY = (100 - (gridHeight / window.innerHeight * 100)) / 2;
+    
+    const x = startX + (col * 280 / window.innerWidth * 100);
+    const y = startY + (row * 180 / window.innerHeight * 100);
     
     return {
-      left: `${Math.max(5, Math.min(85, randomX))}%`,
-      top: `${Math.max(10, Math.min(80, randomY))}%`,
+      left: `${Math.max(2, Math.min(95, x))}%`,
+      top: `${Math.max(15, Math.min(85, y))}%`,
     };
-  };
-
-  const getRandomRotation = () => {
-    return Math.random() * 20 - 10; // -10 to +10 degrees
   };
 
   return (
@@ -131,8 +134,7 @@ const Projection = () => {
       {/* Sticky Notes */}
       <div className="absolute inset-0 pt-32">
         {displayedMessages.map((message, index) => {
-          const position = getRandomPosition(index);
-          const rotation = getRandomRotation();
+          const position = getGridPosition(index);
           const color = getRandomColor();
           
           return (
@@ -142,7 +144,6 @@ const Projection = () => {
               style={{
                 ...position,
                 backgroundColor: color,
-                transform: `rotate(${rotation}deg)`,
                 fontSize: `${settings.font_size}px`,
                 animation: `slideIn 0.8s ease-out ${index * 0.5}s both`
               }}
