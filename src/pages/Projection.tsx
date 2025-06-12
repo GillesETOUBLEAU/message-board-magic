@@ -119,7 +119,7 @@ const Projection = () => {
           return (
             <div
               key={message.id}
-              className="absolute w-64 h-40 p-4 shadow-lg transition-all duration-1000 ease-out animate-in slide-in-from-bottom-4 fade-in"
+              className="absolute w-64 h-40 p-4 shadow-lg transition-all duration-1000 ease-out"
               style={{
                 ...position,
                 backgroundColor: color,
@@ -154,18 +154,21 @@ const Projection = () => {
         </p>
       </div>
 
-      <style jsx>{`
-        @keyframes slideIn {
-          from {
-            opacity: 0;
-            transform: translateY(50px) scale(0.8) rotate(${getRandomRotation()}deg);
+      {/* CSS Animation */}
+      <style>
+        {`
+          @keyframes slideIn {
+            from {
+              opacity: 0;
+              transform: translateY(50px) scale(0.8);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0) scale(1);
+            }
           }
-          to {
-            opacity: 1;
-            transform: translateY(0) scale(1) rotate(${getRandomRotation()}deg);
-          }
-        }
-      `}</style>
+        `}
+      </style>
     </div>
   );
 };
