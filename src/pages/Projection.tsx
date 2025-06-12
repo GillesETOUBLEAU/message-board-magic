@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 
@@ -78,7 +77,7 @@ const Projection = () => {
     if (messages.length > displayedMessages.length) {
       const timer = setTimeout(() => {
         const newMessage = messages[displayedMessages.length];
-        const assignedColor = getRandomColor();
+        const assignedColor = getDistributedColor(displayedMessages.length);
         
         setDisplayedMessages(prev => [
           ...prev,
@@ -90,8 +89,19 @@ const Projection = () => {
     }
   }, [messages, displayedMessages]);
 
-  const getRandomColor = () => {
-    return settings.sticky_note_colors[Math.floor(Math.random() * settings.sticky_note_colors.length)];
+  const getDistributedColor = (index: number) => {
+    // Filter out colors that are too similar to the background
+    const availableColors = settings.sticky_note_colors.filter(color => 
+      color.toLowerCase() !== settings.background_color.toLowerCase()
+    );
+    
+    // If no colors are available (shouldn't happen), use a default
+    if (availableColors.length === 0) {
+      return '#fef3c7'; // Default yellow
+    }
+    
+    // Distribute colors evenly to maximize variety
+    return availableColors[index % availableColors.length];
   };
 
   const getGridPosition = (index: number) => {
@@ -156,7 +166,7 @@ const Projection = () => {
             >
               <div className="h-full flex flex-col justify-between">
                 <p className="text-gray-800 font-medium leading-tight overflow-hidden">
-                  {message.content}
+                  {message.content.length > 160 ? `${message.content.substring(0, 160)}...` : message.content}
                 </p>
                 <div className="text-xs text-gray-600 opacity-75">
                   - {message.author_name}
