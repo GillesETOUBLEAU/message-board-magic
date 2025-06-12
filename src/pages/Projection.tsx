@@ -172,12 +172,6 @@ const Projection = () => {
                   - {message.author_name}
                 </div>
               </div>
-              
-              {/* Sticky note effect */}
-              <div 
-                className="absolute top-0 left-1/2 transform -translate-x-1/2 w-8 h-6 opacity-30"
-                style={{ backgroundColor: '#f59e0b' }}
-              />
             </div>
           );
         })}
