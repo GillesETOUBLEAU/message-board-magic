@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -90,7 +89,13 @@ const AdminDashboard = () => {
     }
     
     if (data) {
-      setSettings(data);
+      // Convert Json type to string[] for sticky_note_colors
+      setSettings({
+        ...data,
+        sticky_note_colors: Array.isArray(data.sticky_note_colors) 
+          ? data.sticky_note_colors as string[]
+          : ['#fef3c7', '#fce7f3', '#dbeafe', '#d1fae5', '#fed7d7']
+      });
     }
   };
 
