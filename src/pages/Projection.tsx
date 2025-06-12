@@ -1,45 +1,62 @@
 
 import React, { useState, useEffect } from 'react';
+import { supabase } from "@/integrations/supabase/client";
 
 interface Message {
   id: string;
   content: string;
-  author: string;
-  timestamp: Date;
+  author_name: string;
+  author_email: string;
   status: 'pending' | 'approved' | 'rejected';
+  created_at: string;
 }
 
 interface ProjectionSettings {
-  backgroundColor: string;
-  fontSize: number;
-  stickyNoteColors: string[];
+  background_color: string;
+  font_size: number;
+  sticky_note_colors: string[];
 }
 
 const Projection = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [settings, setSettings] = useState<ProjectionSettings>({
-    backgroundColor: '#ffffff',
-    fontSize: 18,
-    stickyNoteColors: ['#fef3c7', '#fce7f3', '#dbeafe', '#d1fae5', '#fed7d7']
+    background_color: '#ffffff',
+    font_size: 18,
+    sticky_note_colors: ['#fef3c7', '#fce7f3', '#dbeafe', '#d1fae5', '#fed7d7']
   });
   const [displayedMessages, setDisplayedMessages] = useState<Message[]>([]);
 
   useEffect(() => {
-    const loadData = () => {
-      const savedMessages = localStorage.getItem('workshop-messages');
-      const savedSettings = localStorage.getItem('workshop-settings');
+    const loadData = async () => {
+      // Load approved messages from Supabase
+      const { data: messagesData, error: messagesError } = await supabase
+        .from('messages')
+        .select('*')
+        .eq('status', 'approved')
+        .order('created_at', { ascending: false });
       
-      if (savedMessages) {
-        const parsedMessages = JSON.parse(savedMessages).map((msg: any) => ({
-          ...msg,
-          timestamp: new Date(msg.timestamp)
-        }));
-        const approved = parsedMessages.filter((msg: Message) => msg.status === 'approved');
-        setMessages(approved);
+      if (messagesError) {
+        console.error('Error loading messages:', messagesError);
+      } else {
+        setMessages(messagesData || []);
       }
+
+      // Load projection settings from Supabase
+      const { data: settingsData, error: settingsError } = await supabase
+        .from('projection_settings')
+        .select('*')
+        .single();
       
-      if (savedSettings) {
-        setSettings(JSON.parse(savedSettings));
+      if (settingsError) {
+        console.error('Error loading settings:', settingsError);
+      } else if (settingsData) {
+        setSettings({
+          background_color: settingsData.background_color || '#ffffff',
+          font_size: settingsData.font_size || 18,
+          sticky_note_colors: Array.isArray(settingsData.sticky_note_colors) 
+            ? settingsData.sticky_note_colors as string[]
+            : ['#fef3c7', '#fce7f3', '#dbeafe', '#d1fae5', '#fed7d7']
+        });
       }
     };
 
@@ -64,7 +81,7 @@ const Projection = () => {
   }, [messages, displayedMessages]);
 
   const getRandomColor = () => {
-    return settings.stickyNoteColors[Math.floor(Math.random() * settings.stickyNoteColors.length)];
+    return settings.sticky_note_colors[Math.floor(Math.random() * settings.sticky_note_colors.length)];
   };
 
   const getRandomPosition = (index: number) => {
@@ -95,7 +112,7 @@ const Projection = () => {
     <div 
       className="w-screen h-screen overflow-hidden relative"
       style={{ 
-        backgroundColor: settings.backgroundColor,
+        backgroundColor: settings.background_color,
         aspectRatio: '16/9'
       }}
     >
@@ -124,7 +141,7 @@ const Projection = () => {
                 ...position,
                 backgroundColor: color,
                 transform: `rotate(${rotation}deg)`,
-                fontSize: `${settings.fontSize}px`,
+                fontSize: `${settings.font_size}px`,
                 animation: `slideIn 0.8s ease-out ${index * 0.5}s both`
               }}
             >
@@ -133,7 +150,7 @@ const Projection = () => {
                   {message.content}
                 </p>
                 <div className="text-xs text-gray-600 opacity-75">
-                  - {message.author.split('@')[0]}
+                  - {message.author_name}
                 </div>
               </div>
               
