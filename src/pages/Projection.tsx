@@ -18,6 +18,10 @@ interface ProjectionSettings {
   sticky_note_colors: string[];
 }
 
+interface MessageWithColor extends Message {
+  color: string;
+}
+
 const Projection = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [settings, setSettings] = useState<ProjectionSettings>({
@@ -26,7 +30,7 @@ const Projection = () => {
     font_size: 18,
     sticky_note_colors: ['#fef3c7', '#fce7f3', '#dbeafe', '#d1fae5', '#fed7d7']
   });
-  const [displayedMessages, setDisplayedMessages] = useState<Message[]>([]);
+  const [displayedMessages, setDisplayedMessages] = useState<MessageWithColor[]>([]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -70,12 +74,15 @@ const Projection = () => {
   }, []);
 
   useEffect(() => {
-    // Animate in new messages one by one
+    // Animate in new messages one by one with fixed colors
     if (messages.length > displayedMessages.length) {
       const timer = setTimeout(() => {
+        const newMessage = messages[displayedMessages.length];
+        const assignedColor = getRandomColor();
+        
         setDisplayedMessages(prev => [
           ...prev,
-          messages[prev.length]
+          { ...newMessage, color: assignedColor }
         ]);
       }, 1000);
       
@@ -135,7 +142,6 @@ const Projection = () => {
       <div className="absolute inset-0 pt-32">
         {displayedMessages.map((message, index) => {
           const position = getGridPosition(index);
-          const color = getRandomColor();
           
           return (
             <div
@@ -143,7 +149,7 @@ const Projection = () => {
               className="absolute w-64 h-40 p-4 shadow-lg transition-all duration-1000 ease-out"
               style={{
                 ...position,
-                backgroundColor: color,
+                backgroundColor: message.color,
                 fontSize: `${settings.font_size}px`,
                 animation: `slideIn 0.8s ease-out ${index * 0.5}s both`
               }}
