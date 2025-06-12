@@ -69,6 +69,7 @@ export type Database = {
           font_size: number | null
           id: string
           sticky_note_colors: Json | null
+          title: string | null
           updated_at: string | null
         }
         Insert: {
@@ -76,6 +77,7 @@ export type Database = {
           font_size?: number | null
           id?: string
           sticky_note_colors?: Json | null
+          title?: string | null
           updated_at?: string | null
         }
         Update: {
@@ -83,6 +85,7 @@ export type Database = {
           font_size?: number | null
           id?: string
           sticky_note_colors?: Json | null
+          title?: string | null
           updated_at?: string | null
         }
         Relationships: []

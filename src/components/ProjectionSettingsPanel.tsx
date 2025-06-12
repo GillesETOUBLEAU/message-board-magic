@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 interface ProjectionSettings {
   id: string;
+  title: string;
   background_color: string;
   font_size: number;
   sticky_note_colors: string[];
@@ -17,6 +18,7 @@ interface ProjectionSettings {
 const ProjectionSettingsPanel = () => {
   const [settings, setSettings] = useState<ProjectionSettings>({
     id: '',
+    title: 'Workshop Ideas Board',
     background_color: '#ffffff',
     font_size: 18,
     sticky_note_colors: ['#fef3c7', '#fce7f3', '#dbeafe', '#d1fae5', '#fed7d7']
@@ -38,9 +40,9 @@ const ProjectionSettingsPanel = () => {
     }
     
     if (data) {
-      // Convert Json type to string[] for sticky_note_colors
       setSettings({
         ...data,
+        title: data.title || 'Workshop Ideas Board',
         sticky_note_colors: Array.isArray(data.sticky_note_colors) 
           ? data.sticky_note_colors as string[]
           : ['#fef3c7', '#fce7f3', '#dbeafe', '#d1fae5', '#fed7d7']
@@ -52,6 +54,7 @@ const ProjectionSettingsPanel = () => {
     const { error } = await supabase
       .from('projection_settings')
       .update({
+        title: settings.title,
         background_color: settings.background_color,
         font_size: settings.font_size,
         sticky_note_colors: settings.sticky_note_colors
@@ -75,6 +78,16 @@ const ProjectionSettingsPanel = () => {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
+        <div>
+          <label className="text-sm font-medium mb-2 block">Title</label>
+          <Input
+            type="text"
+            value={settings.title}
+            onChange={(e) => setSettings({...settings, title: e.target.value})}
+            placeholder="Workshop Ideas Board"
+          />
+        </div>
+
         <div>
           <label className="text-sm font-medium mb-2 block">Background Color</label>
           <div className="flex gap-2">

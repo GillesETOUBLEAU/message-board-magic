@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 
@@ -12,6 +11,7 @@ interface Message {
 }
 
 interface ProjectionSettings {
+  title: string;
   background_color: string;
   font_size: number;
   sticky_note_colors: string[];
@@ -20,6 +20,7 @@ interface ProjectionSettings {
 const Projection = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [settings, setSettings] = useState<ProjectionSettings>({
+    title: 'Workshop Ideas Board',
     background_color: '#ffffff',
     font_size: 18,
     sticky_note_colors: ['#fef3c7', '#fce7f3', '#dbeafe', '#d1fae5', '#fed7d7']
@@ -51,6 +52,7 @@ const Projection = () => {
         console.error('Error loading settings:', settingsError);
       } else if (settingsData) {
         setSettings({
+          title: settingsData.title || 'Workshop Ideas Board',
           background_color: settingsData.background_color || '#ffffff',
           font_size: settingsData.font_size || 18,
           sticky_note_colors: Array.isArray(settingsData.sticky_note_colors) 
@@ -119,7 +121,7 @@ const Projection = () => {
       {/* Header */}
       <div className="absolute top-8 left-8 right-8 text-center z-10">
         <h1 className="text-4xl font-bold text-gray-800 mb-2">
-          Workshop Ideas Board
+          {settings.title}
         </h1>
         <p className="text-xl text-gray-600">
           {displayedMessages.length} contributions from our community
