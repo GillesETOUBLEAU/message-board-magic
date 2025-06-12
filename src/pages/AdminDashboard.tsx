@@ -6,118 +6,218 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Check, X, Settings, Shield, Palette } from 'lucide-react';
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 
 interface Message {
   id: string;
   content: string;
-  author: string;
-  timestamp: Date;
+  author_name: string;
+  author_email: string;
   status: 'pending' | 'approved' | 'rejected';
+  created_at: string;
 }
 
 interface ProjectionSettings {
-  backgroundColor: string;
-  fontSize: number;
-  stickyNoteColors: string[];
+  id: string;
+  background_color: string;
+  font_size: number;
+  sticky_note_colors: string[];
 }
 
 const AdminDashboard = () => {
+  const { user, session } = useAuth();
   const [isAdmin, setIsAdmin] = useState(false);
-  const [adminCode, setAdminCode] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [name, setName] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [settings, setSettings] = useState<ProjectionSettings>({
-    backgroundColor: '#ffffff',
-    fontSize: 18,
-    stickyNoteColors: ['#fef3c7', '#fce7f3', '#dbeafe', '#d1fae5', '#fed7d7']
+    id: '',
+    background_color: '#ffffff',
+    font_size: 18,
+    sticky_note_colors: ['#fef3c7', '#fce7f3', '#dbeafe', '#d1fae5', '#fed7d7']
   });
 
   useEffect(() => {
-    const savedAdmin = localStorage.getItem('workshop-admin');
-    if (savedAdmin === 'true') {
+    if (user) {
+      checkAdminStatus();
+    }
+  }, [user]);
+
+  const checkAdminStatus = async () => {
+    if (!user) return;
+    
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single();
+    
+    if (profile?.role === 'admin') {
       setIsAdmin(true);
       loadMessages();
       loadSettings();
-    }
-  }, []);
-
-  const loadMessages = () => {
-    const savedMessages = localStorage.getItem('workshop-messages');
-    if (savedMessages) {
-      const parsedMessages = JSON.parse(savedMessages).map((msg: any) => ({
-        ...msg,
-        timestamp: new Date(msg.timestamp)
-      }));
-      setMessages(parsedMessages);
-    }
-  };
-
-  const loadSettings = () => {
-    const savedSettings = localStorage.getItem('workshop-settings');
-    if (savedSettings) {
-      setSettings(JSON.parse(savedSettings));
-    }
-  };
-
-  const handleAdminLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (adminCode === 'admin123') {
-      setIsAdmin(true);
-      localStorage.setItem('workshop-admin', 'true');
-      loadMessages();
-      loadSettings();
-      toast.success("Admin access granted!");
     } else {
-      toast.error("Invalid admin code");
+      toast.error("Access denied. Admin role required.");
     }
   };
 
-  const updateMessageStatus = (messageId: string, status: 'approved' | 'rejected') => {
-    const updatedMessages = messages.map(msg =>
-      msg.id === messageId ? { ...msg, status } : msg
-    );
-    setMessages(updatedMessages);
-    localStorage.setItem('workshop-messages', JSON.stringify(updatedMessages));
+  const loadMessages = async () => {
+    const { data, error } = await supabase
+      .from('messages')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    if (error) {
+      console.error('Error loading messages:', error);
+      return;
+    }
+    
+    setMessages(data || []);
+  };
+
+  const loadSettings = async () => {
+    const { data, error } = await supabase
+      .from('projection_settings')
+      .select('*')
+      .single();
+    
+    if (error) {
+      console.error('Error loading settings:', error);
+      return;
+    }
+    
+    if (data) {
+      setSettings(data);
+    }
+  };
+
+  const handleAuth = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (isSignUp) {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { name },
+          emailRedirectTo: `${window.location.origin}/admin`
+        }
+      });
+      
+      if (error) {
+        toast.error(error.message);
+      } else {
+        toast.success("Check your email to confirm your account!");
+      }
+    } else {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+      
+      if (error) {
+        toast.error(error.message);
+      }
+    }
+  };
+
+  const updateMessageStatus = async (messageId: string, status: 'approved' | 'rejected') => {
+    const { error } = await supabase
+      .from('messages')
+      .update({ status })
+      .eq('id', messageId);
+    
+    if (error) {
+      toast.error("Failed to update message status");
+      return;
+    }
+    
+    loadMessages();
     toast.success(`Message ${status}!`);
   };
 
-  const saveSettings = () => {
-    localStorage.setItem('workshop-settings', JSON.stringify(settings));
+  const saveSettings = async () => {
+    const { error } = await supabase
+      .from('projection_settings')
+      .update({
+        background_color: settings.background_color,
+        font_size: settings.font_size,
+        sticky_note_colors: settings.sticky_note_colors
+      })
+      .eq('id', settings.id);
+    
+    if (error) {
+      toast.error("Failed to save settings");
+      return;
+    }
+    
     toast.success("Settings saved!");
   };
 
-  const logout = () => {
-    localStorage.removeItem('workshop-admin');
+  const logout = async () => {
+    await supabase.auth.signOut();
     setIsAdmin(false);
-    setAdminCode('');
   };
 
-  if (!isAdmin) {
+  if (!user || !isAdmin) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 flex items-center justify-center p-4">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-bold text-gray-800 flex items-center gap-2 justify-center">
               <Shield className="h-6 w-6" />
-              Admin Access
+              Admin {isSignUp ? 'Sign Up' : 'Login'}
             </CardTitle>
-            <p className="text-gray-600">Enter admin code to continue</p>
+            <p className="text-gray-600">
+              {isSignUp ? 'Create admin account' : 'Enter your credentials'}
+            </p>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleAdminLogin} className="space-y-4">
+            <form onSubmit={handleAuth} className="space-y-4">
+              {isSignUp && (
+                <Input
+                  type="text"
+                  placeholder="Full name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              )}
+              <Input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
               <Input
                 type="password"
-                placeholder="Admin code"
-                value={adminCode}
-                onChange={(e) => setAdminCode(e.target.value)}
-                className="w-full"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
               />
               <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700">
-                Login as Admin
+                {isSignUp ? 'Sign Up' : 'Login'}
               </Button>
             </form>
-            <p className="text-xs text-gray-500 mt-4 text-center">
-              Demo code: admin123
-            </p>
+            <div className="mt-4 text-center">
+              <button
+                type="button"
+                onClick={() => setIsSignUp(!isSignUp)}
+                className="text-purple-600 hover:text-purple-700 text-sm"
+              >
+                {isSignUp ? 'Already have an account? Login' : 'Need an account? Sign up'}
+              </button>
+            </div>
+            {isSignUp && (
+              <p className="text-xs text-gray-500 mt-4 text-center">
+                Note: You'll need to manually set your role to 'admin' in the database after signup.
+              </p>
+            )}
           </CardContent>
         </Card>
       </div>
@@ -169,8 +269,8 @@ const AdminDashboard = () => {
                         <p className="text-sm mb-2">{message.content}</p>
                         <div className="flex justify-between items-center">
                           <div className="text-xs text-gray-500">
-                            <p>From: {message.author}</p>
-                            <p>{message.timestamp.toLocaleString()}</p>
+                            <p>From: {message.author_name}</p>
+                            <p>{new Date(message.created_at).toLocaleString()}</p>
                           </div>
                           <div className="flex gap-2">
                             <Button
@@ -206,7 +306,7 @@ const AdminDashboard = () => {
                     <div key={message.id} className="p-3 bg-green-50 rounded-lg">
                       <p className="text-sm">{message.content}</p>
                       <p className="text-xs text-gray-500 mt-1">
-                        {message.author} • {message.timestamp.toLocaleTimeString()}
+                        {message.author_name} • {new Date(message.created_at).toLocaleTimeString()}
                       </p>
                     </div>
                   ))}
@@ -228,14 +328,14 @@ const AdminDashboard = () => {
                 <div className="flex gap-2">
                   <Input
                     type="color"
-                    value={settings.backgroundColor}
-                    onChange={(e) => setSettings({...settings, backgroundColor: e.target.value})}
+                    value={settings.background_color}
+                    onChange={(e) => setSettings({...settings, background_color: e.target.value})}
                     className="w-16 h-10"
                   />
                   <Input
                     type="text"
-                    value={settings.backgroundColor}
-                    onChange={(e) => setSettings({...settings, backgroundColor: e.target.value})}
+                    value={settings.background_color}
+                    onChange={(e) => setSettings({...settings, background_color: e.target.value})}
                     className="flex-1"
                   />
                 </div>
@@ -247,23 +347,23 @@ const AdminDashboard = () => {
                   type="number"
                   min="12"
                   max="32"
-                  value={settings.fontSize}
-                  onChange={(e) => setSettings({...settings, fontSize: parseInt(e.target.value)})}
+                  value={settings.font_size}
+                  onChange={(e) => setSettings({...settings, font_size: parseInt(e.target.value)})}
                 />
               </div>
 
               <div>
                 <label className="text-sm font-medium mb-2 block">Sticky Note Colors</label>
                 <div className="grid grid-cols-5 gap-2">
-                  {settings.stickyNoteColors.map((color, index) => (
+                  {settings.sticky_note_colors.map((color, index) => (
                     <Input
                       key={index}
                       type="color"
                       value={color}
                       onChange={(e) => {
-                        const newColors = [...settings.stickyNoteColors];
+                        const newColors = [...settings.sticky_note_colors];
                         newColors[index] = e.target.value;
-                        setSettings({...settings, stickyNoteColors: newColors});
+                        setSettings({...settings, sticky_note_colors: newColors});
                       }}
                       className="w-12 h-12 p-1"
                     />

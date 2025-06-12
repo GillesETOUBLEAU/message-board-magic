@@ -9,7 +9,105 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      messages: {
+        Row: {
+          author_email: string
+          author_name: string
+          content: string
+          created_at: string | null
+          id: string
+          status: Database["public"]["Enums"]["message_status"] | null
+          updated_at: string | null
+        }
+        Insert: {
+          author_email: string
+          author_name: string
+          content: string
+          created_at?: string | null
+          id?: string
+          status?: Database["public"]["Enums"]["message_status"] | null
+          updated_at?: string | null
+        }
+        Update: {
+          author_email?: string
+          author_name?: string
+          content?: string
+          created_at?: string | null
+          id?: string
+          status?: Database["public"]["Enums"]["message_status"] | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          name: string
+          role: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id: string
+          name: string
+          role?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          name?: string
+          role?: string | null
+        }
+        Relationships: []
+      }
+      projection_settings: {
+        Row: {
+          background_color: string | null
+          font_size: number | null
+          id: string
+          sticky_note_colors: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          background_color?: string | null
+          font_size?: number | null
+          id?: string
+          sticky_note_colors?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          background_color?: string | null
+          font_size?: number | null
+          id?: string
+          sticky_note_colors?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      workshop_users: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -18,7 +116,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      message_status: "pending" | "approved" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -133,6 +231,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      message_status: ["pending", "approved", "rejected"],
+    },
   },
 } as const
