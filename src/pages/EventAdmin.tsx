@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -61,10 +62,6 @@ const EventAdmin = () => {
     }
   };
 
-  const handleAllEventsClick = () => {
-    navigate('/events');
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#E6F3FF' }}>
@@ -111,12 +108,12 @@ const EventAdmin = () => {
           </div>
 
           {/* Header with proper spacing from logo */}
-          <div className="flex justify-between items-start mb-6 mt-16">
+          <div className="flex justify-between items-start mb-6 pt-16">
             <div>
               <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
               <p className="text-gray-600">Manage events and settings</p>
             </div>
-            <div className="mt-16">
+            <div className="flex items-center">
               <Button onClick={logout} variant="outline">
                 Logout
               </Button>
@@ -145,20 +142,17 @@ const EventAdmin = () => {
         </div>
 
         {/* Header with proper spacing from logo */}
-        <div className="flex justify-between items-start mb-6 mt-16">
+        <div className="flex justify-between items-start mb-6 pt-16">
           <div>
             <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
             <p className="text-gray-600">Managing: {currentEvent.name}</p>
           </div>
-          <div className="flex gap-4 mt-16">
+          <div className="flex gap-4 items-center">
             <Button 
               onClick={() => window.open(`/event/${currentEvent.slug}/projection`, '_blank')}
               className="bg-green-600 hover:bg-green-700"
             >
               Open Projection
-            </Button>
-            <Button onClick={handleAllEventsClick} variant="outline">
-              All Events
             </Button>
             <Button onClick={logout} variant="outline">
               Logout
