@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 import AuthForm from '@/components/AuthForm';
@@ -67,6 +68,15 @@ const UserDashboard = () => {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#E6F3FF' }}>
       <div className="container mx-auto px-4 py-8">
+        {/* Logo */}
+        <div className="absolute top-4 right-4 z-10">
+          <img 
+            src="/ChatGPT Image 13 juin 2025, 15_24_09.png" 
+            alt="Logo" 
+            className="h-12 w-auto"
+          />
+        </div>
+
         <DashboardHeader userName={user.name} onLogout={logout} />
         <div className="grid md:grid-cols-2 gap-8">
           <MessageForm user={user} onMessageSent={handleMessageSent} />

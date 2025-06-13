@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { supabase } from "@/integrations/supabase/client";
@@ -155,6 +156,15 @@ const EventProjection = () => {
   if (loading) {
     return (
       <div className="w-screen h-screen flex items-center justify-center bg-gray-100">
+        {/* Logo */}
+        <div className="absolute top-4 right-4 z-10">
+          <img 
+            src="/ChatGPT Image 13 juin 2025, 15_24_09.png" 
+            alt="Logo" 
+            className="h-12 w-auto"
+          />
+        </div>
+
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading event...</p>
@@ -166,6 +176,15 @@ const EventProjection = () => {
   if (!currentEvent) {
     return (
       <div className="w-screen h-screen flex items-center justify-center bg-gray-100">
+        {/* Logo */}
+        <div className="absolute top-4 right-4 z-10">
+          <img 
+            src="/ChatGPT Image 13 juin 2025, 15_24_09.png" 
+            alt="Logo" 
+            className="h-12 w-auto"
+          />
+        </div>
+
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-800 mb-4">Event Not Found</h1>
           <p className="text-gray-600">The requested event could not be found.</p>
@@ -182,6 +201,15 @@ const EventProjection = () => {
         aspectRatio: '16/9'
       }}
     >
+      {/* Logo */}
+      <div className="absolute top-4 right-4 z-20">
+        <img 
+          src="/ChatGPT Image 13 juin 2025, 15_24_09.png" 
+          alt="Logo" 
+          className="h-12 w-auto"
+        />
+      </div>
+
       {/* Header */}
       <div className="absolute top-8 left-8 right-8 text-center z-10">
         <h1 className="text-4xl font-bold text-gray-800 mb-2">

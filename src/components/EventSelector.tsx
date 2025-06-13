@@ -23,6 +23,15 @@ const EventSelector = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#E6F3FF' }}>
+        {/* Logo */}
+        <div className="absolute top-4 right-4 z-10">
+          <img 
+            src="/ChatGPT Image 13 juin 2025, 15_24_09.png" 
+            alt="Logo" 
+            className="h-12 w-auto"
+          />
+        </div>
+
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-2 border-blue-600 border-t-transparent mx-auto mb-4"></div>
           <p className="text-slate-600 text-lg">Loading events...</p>
@@ -33,6 +42,15 @@ const EventSelector = () => {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#E6F3FF' }}>
+      {/* Logo */}
+      <div className="absolute top-4 right-4 z-10">
+        <img 
+          src="/ChatGPT Image 13 juin 2025, 15_24_09.png" 
+          alt="Logo" 
+          className="h-12 w-auto"
+        />
+      </div>
+
       {/* Header Section */}
       <div className="bg-white/80 backdrop-blur-sm border-b border-slate-200">
         <div className="container mx-auto px-6 py-16">

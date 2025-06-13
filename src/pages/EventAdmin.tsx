@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -58,6 +59,15 @@ const EventAdmin = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#E6F3FF' }}>
+        {/* Logo */}
+        <div className="absolute top-4 right-4 z-10">
+          <img 
+            src="/ChatGPT Image 13 juin 2025, 15_24_09.png" 
+            alt="Logo" 
+            className="h-12 w-auto"
+          />
+        </div>
+
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading...</p>
@@ -74,6 +84,15 @@ const EventAdmin = () => {
     return (
       <div className="min-h-screen" style={{ backgroundColor: '#E6F3FF' }}>
         <div className="container mx-auto px-4 py-8">
+          {/* Logo */}
+          <div className="absolute top-4 right-4 z-10">
+            <img 
+              src="/ChatGPT Image 13 juin 2025, 15_24_09.png" 
+              alt="Logo" 
+              className="h-12 w-auto"
+            />
+          </div>
+
           <div className="flex justify-between items-center mb-8">
             <div>
               <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
@@ -92,6 +111,15 @@ const EventAdmin = () => {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#E6F3FF' }}>
       <div className="container mx-auto px-4 py-8">
+        {/* Logo */}
+        <div className="absolute top-4 right-4 z-10">
+          <img 
+            src="/ChatGPT Image 13 juin 2025, 15_24_09.png" 
+            alt="Logo" 
+            className="h-12 w-auto"
+          />
+        </div>
+
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>

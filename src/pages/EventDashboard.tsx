@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from "@/integrations/supabase/client";
@@ -90,6 +91,15 @@ const EventDashboard = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#E6F3FF' }}>
+        {/* Logo */}
+        <div className="absolute top-4 right-4 z-10">
+          <img 
+            src="/ChatGPT Image 13 juin 2025, 15_24_09.png" 
+            alt="Logo" 
+            className="h-12 w-auto"
+          />
+        </div>
+
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading event...</p>
@@ -101,6 +111,15 @@ const EventDashboard = () => {
   if (!currentEvent) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#E6F3FF' }}>
+        {/* Logo */}
+        <div className="absolute top-4 right-4 z-10">
+          <img 
+            src="/ChatGPT Image 13 juin 2025, 15_24_09.png" 
+            alt="Logo" 
+            className="h-12 w-auto"
+          />
+        </div>
+
         <div className="text-center">
           <p className="text-gray-600 mb-4">Event not found</p>
           <button onClick={() => navigate('/')} className="text-blue-600 hover:underline">
@@ -118,6 +137,15 @@ const EventDashboard = () => {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#E6F3FF' }}>
       <div className="container mx-auto px-4 py-8">
+        {/* Logo */}
+        <div className="absolute top-4 right-4 z-10">
+          <img 
+            src="/ChatGPT Image 13 juin 2025, 15_24_09.png" 
+            alt="Logo" 
+            className="h-12 w-auto"
+          />
+        </div>
+
         <DashboardHeader 
           userName={user.name} 
           onLogout={logout} 

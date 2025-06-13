@@ -14,6 +14,15 @@ const NotFound = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#E6F3FF' }}>
+      {/* Logo */}
+      <div className="absolute top-4 right-4 z-10">
+        <img 
+          src="/ChatGPT Image 13 juin 2025, 15_24_09.png" 
+          alt="Logo" 
+          className="h-12 w-auto"
+        />
+      </div>
+
       <div className="text-center">
         <h1 className="text-4xl font-bold mb-4">404</h1>
         <p className="text-xl text-gray-600 mb-4">Oops! Page not found</p>
