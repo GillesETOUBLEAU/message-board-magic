@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -10,7 +9,6 @@ import AdminAuthForm from "@/components/AdminAuthForm";
 import MessageManager from "@/components/MessageManager";
 import ProjectionSettingsPanel from "@/components/ProjectionSettingsPanel";
 import EventManager from "@/components/EventManager";
-import EventSwitcher from "@/components/EventSwitcher";
 
 const EventAdmin = () => {
   const { eventSlug } = useParams();
@@ -65,11 +63,6 @@ const EventAdmin = () => {
 
   const handleAllEventsClick = () => {
     navigate('/events');
-  };
-
-  const handleEventSwitch = (event: any) => {
-    setCurrentEvent(event);
-    navigate(`/event/${event.slug}/admin`);
   };
 
   if (loading) {
@@ -171,15 +164,6 @@ const EventAdmin = () => {
               Logout
             </Button>
           </div>
-        </div>
-
-        {/* Event Switcher */}
-        <div className="mb-6">
-          <EventSwitcher 
-            currentEvent={currentEvent}
-            events={events}
-            onEventSwitch={handleEventSwitch}
-          />
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
