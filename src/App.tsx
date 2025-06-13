@@ -13,6 +13,7 @@ import UserDashboard from "./pages/UserDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import Projection from "./pages/Projection";
 import NotFound from "./pages/NotFound";
+import EventSelector from "./components/EventSelector";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/events" element={<EventSelector />} />
             <Route path="/event/:eventSlug/dashboard" element={<EventDashboard />} />
             <Route path="/event/:eventSlug/admin" element={<EventAdmin />} />
             <Route path="/event/:eventSlug/projection" element={<EventProjection />} />

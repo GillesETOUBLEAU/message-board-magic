@@ -24,7 +24,7 @@ const AdminAccessCard = () => {
       <CardContent>
         <div className="space-y-4">
           <Button 
-            onClick={() => navigate('/admin')}
+            onClick={() => navigate('/events')}
             className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-medium py-3 shadow-md hover:shadow-lg transition-all duration-200"
           >
             <Settings className="mr-2 h-4 w-4" />
