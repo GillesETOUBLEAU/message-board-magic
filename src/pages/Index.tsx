@@ -10,7 +10,7 @@ const Index = () => {
       {/* Header Section */}
       <div className="w-full">
         <img 
-          src="/HeaderSticky.png" 
+          src="/Header2.png" 
           alt="Header" 
           className="w-full h-auto object-cover"
         />
