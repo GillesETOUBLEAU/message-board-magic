@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Plus, Edit, Trash2, Eye, Copy, Settings } from 'lucide-react';
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -131,6 +132,9 @@ const EventManager = () => {
     navigate(`/event/${event.slug}/admin`);
   };
 
+  // Get default expanded items (currently managing event)
+  const defaultExpanded = currentEvent ? [currentEvent.id] : [];
+
   return (
     <Card className="w-full">
       <CardHeader className="pb-4">
@@ -207,48 +211,50 @@ const EventManager = () => {
           </Card>
         )}
 
-        <div className="space-y-6">
+        <Accordion type="multiple" defaultValue={defaultExpanded} className="space-y-4">
           {events.map((event) => {
             const isCurrentlyManaged = currentEvent?.id === event.id;
             
             return (
-              <Card 
+              <AccordionItem 
                 key={event.id} 
-                className={`transition-all duration-200 ${
+                value={event.id}
+                className={`border rounded-lg transition-all duration-200 ${
                   isCurrentlyManaged 
                     ? 'border-2 border-blue-400 bg-blue-50/50 shadow-md' 
                     : 'border border-gray-200 hover:shadow-sm'
                 }`}
               >
-                <CardContent className="p-6">
-                  <div className="space-y-5">
-                    {/* Header Section */}
-                    <div className="flex justify-between items-start gap-6">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-3 mb-3 flex-wrap">
-                          <h3 className="font-semibold text-xl text-gray-800">{event.name}</h3>
-                          <div className="flex gap-2">
-                            <Badge variant={event.is_active ? "default" : "secondary"} className="px-3 py-1">
-                              {event.is_active ? "Active" : "Inactive"}
-                            </Badge>
-                            <Badge variant="destructive" className="px-3 py-1">
-                              Code Protected
-                            </Badge>
-                            {isCurrentlyManaged && (
-                              <Badge className="bg-blue-600 hover:bg-blue-700 px-3 py-1">
-                                Currently Managing
-                              </Badge>
-                            )}
-                          </div>
-                        </div>
-                        {event.description && (
-                          <p className="text-gray-600 mb-3 leading-relaxed">{event.description}</p>
+                <AccordionTrigger className="px-6 py-4 hover:no-underline">
+                  <div className="flex items-center justify-between w-full mr-4">
+                    <div className="flex items-center gap-4">
+                      <h3 className="font-semibold text-lg text-gray-800">{event.name}</h3>
+                      <div className="flex gap-2">
+                        <Badge variant={event.is_active ? "default" : "secondary"} className="px-2 py-1 text-xs">
+                          {event.is_active ? "Active" : "Inactive"}
+                        </Badge>
+                        <Badge variant="destructive" className="px-2 py-1 text-xs">
+                          Code Protected
+                        </Badge>
+                        {isCurrentlyManaged && (
+                          <Badge className="bg-blue-600 hover:bg-blue-700 px-2 py-1 text-xs">
+                            Currently Managing
+                          </Badge>
                         )}
-                        <p className="text-sm text-gray-500 mb-4">
-                          <span className="font-medium">Slug:</span> {event.slug}
-                        </p>
                       </div>
                     </div>
+                  </div>
+                </AccordionTrigger>
+                
+                <AccordionContent className="px-6 pb-6">
+                  <div className="space-y-5 pt-2">
+                    {/* Event Details */}
+                    {event.description && (
+                      <p className="text-gray-600 leading-relaxed">{event.description}</p>
+                    )}
+                    <p className="text-sm text-gray-500">
+                      <span className="font-medium">Slug:</span> {event.slug}
+                    </p>
 
                     {/* Access Code Section */}
                     <div className="bg-gray-50 p-4 rounded-lg border">
@@ -314,11 +320,11 @@ const EventManager = () => {
                     
                     <AccessCodeManager event={event} onCodeUpdated={loadEvents} />
                   </div>
-                </CardContent>
-              </Card>
+                </AccordionContent>
+              </AccordionItem>
             );
           })}
-        </div>
+        </Accordion>
       </CardContent>
     </Card>
   );
