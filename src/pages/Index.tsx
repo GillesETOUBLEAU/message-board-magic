@@ -6,7 +6,7 @@ import AdminAccessCard from '@/components/AdminAccessCard';
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <div className="min-h-screen" style={{ backgroundColor: '#E6F3FF' }}>
       {/* Header Section */}
       <div className="w-full">
         <img 

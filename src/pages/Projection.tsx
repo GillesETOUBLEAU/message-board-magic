@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 
@@ -25,7 +26,7 @@ const Projection = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [settings, setSettings] = useState<ProjectionSettings>({
     title: 'Workshop Ideas Board',
-    background_color: '#ffffff',
+    background_color: '#E6F3FF',
     font_size: 18,
     sticky_note_colors: ['#fef3c7', '#fce7f3', '#dbeafe', '#d1fae5', '#fed7d7']
   });
@@ -57,7 +58,7 @@ const Projection = () => {
       } else if (settingsData) {
         setSettings({
           title: settingsData.title || 'Workshop Ideas Board',
-          background_color: settingsData.background_color || '#ffffff',
+          background_color: settingsData.background_color || '#E6F3FF',
           font_size: settingsData.font_size || 18,
           sticky_note_colors: Array.isArray(settingsData.sticky_note_colors) 
             ? settingsData.sticky_note_colors as string[]
