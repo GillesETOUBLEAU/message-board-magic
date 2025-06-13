@@ -9,8 +9,51 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      event_access_attempts: {
+        Row: {
+          attempted_code: string | null
+          created_at: string
+          event_id: string
+          id: string
+          ip_address: string | null
+          success: boolean
+          user_email: string | null
+          user_name: string | null
+        }
+        Insert: {
+          attempted_code?: string | null
+          created_at?: string
+          event_id: string
+          id?: string
+          ip_address?: string | null
+          success?: boolean
+          user_email?: string | null
+          user_name?: string | null
+        }
+        Update: {
+          attempted_code?: string | null
+          created_at?: string
+          event_id?: string
+          id?: string
+          ip_address?: string | null
+          success?: boolean
+          user_email?: string | null
+          user_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_access_attempts_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       events: {
         Row: {
+          access_code: string | null
+          access_mode: string
           created_at: string
           description: string | null
           id: string
@@ -20,6 +63,8 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          access_code?: string | null
+          access_mode?: string
           created_at?: string
           description?: string | null
           id?: string
@@ -29,6 +74,8 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          access_code?: string | null
+          access_mode?: string
           created_at?: string
           description?: string | null
           id?: string
