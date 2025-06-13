@@ -30,6 +30,7 @@ const ProjectionSettingsPanel = () => {
 
   useEffect(() => {
     if (currentEvent) {
+      console.log('ProjectionSettingsPanel: Loading settings for event:', currentEvent.name, 'ID:', currentEvent.id);
       loadSettings();
     }
   }, [currentEvent]);
@@ -49,6 +50,7 @@ const ProjectionSettingsPanel = () => {
     }
     
     if (data) {
+      console.log('ProjectionSettingsPanel: Found existing settings:', data);
       setSettings({
         id: data.id,
         event_id: data.event_id,
@@ -60,6 +62,7 @@ const ProjectionSettingsPanel = () => {
           : ['#fef3c7', '#fce7f3', '#dbeafe', '#d1fae5', '#fed7d7']
       });
     } else {
+      console.log('ProjectionSettingsPanel: No existing settings, using defaults for event:', currentEvent.name);
       // Set default values for new event
       setSettings({
         event_id: currentEvent.id,
@@ -84,6 +87,8 @@ const ProjectionSettingsPanel = () => {
       sticky_note_colors: settings.sticky_note_colors
     };
 
+    console.log('ProjectionSettingsPanel: Saving settings:', settingsData);
+
     let error;
     
     if (settings.id) {
@@ -93,6 +98,7 @@ const ProjectionSettingsPanel = () => {
         .update(settingsData)
         .eq('id', settings.id);
       error = result.error;
+      console.log('ProjectionSettingsPanel: Updated existing settings, error:', error);
     } else {
       // Insert new settings
       const result = await supabase
@@ -103,6 +109,7 @@ const ProjectionSettingsPanel = () => {
       
       if (!result.error && result.data) {
         setSettings(prev => ({ ...prev, id: result.data.id }));
+        console.log('ProjectionSettingsPanel: Created new settings with ID:', result.data.id);
       }
       error = result.error;
     }

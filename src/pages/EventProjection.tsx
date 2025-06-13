@@ -26,7 +26,7 @@ interface MessageWithColor extends Message {
 
 const EventProjection = () => {
   const { eventSlug } = useParams();
-  const { events, setCurrentEvent, currentEvent } = useEvent();
+  const { events, setCurrentEvent, currentEvent, loading } = useEvent();
   const [messages, setMessages] = useState<Message[]>([]);
   const [settings, setSettings] = useState<ProjectionSettings>({
     title: 'Workshop Ideas Board',
@@ -37,16 +37,18 @@ const EventProjection = () => {
   const [displayedMessages, setDisplayedMessages] = useState<MessageWithColor[]>([]);
 
   useEffect(() => {
-    if (events.length > 0 && eventSlug) {
+    if (!loading && events.length > 0 && eventSlug) {
       const event = events.find(e => e.slug === eventSlug);
       if (event) {
         setCurrentEvent(event);
       }
     }
-  }, [events, eventSlug, setCurrentEvent]);
+  }, [events, eventSlug, loading, setCurrentEvent]);
 
   useEffect(() => {
     if (currentEvent) {
+      console.log('EventProjection: Loading data for event:', currentEvent.name, 'ID:', currentEvent.id);
+      
       const loadData = async () => {
         // Load approved messages from Supabase for this event
         const { data: messagesData, error: messagesError } = await supabase
@@ -59,6 +61,7 @@ const EventProjection = () => {
         if (messagesError) {
           console.error('Error loading messages:', messagesError);
         } else {
+          console.log('EventProjection: Loaded messages:', messagesData?.length || 0);
           setMessages(messagesData || []);
         }
 
@@ -67,11 +70,12 @@ const EventProjection = () => {
           .from('projection_settings')
           .select('*')
           .eq('event_id', currentEvent.id)
-          .single();
+          .maybeSingle();
         
         if (settingsError) {
           console.error('Error loading settings:', settingsError);
         } else if (settingsData) {
+          console.log('EventProjection: Loaded settings:', settingsData);
           setSettings({
             title: settingsData.title || `${currentEvent.name} - Ideas Board`,
             background_color: settingsData.background_color || '#ffffff',
@@ -81,6 +85,7 @@ const EventProjection = () => {
               : ['#fef3c7', '#fce7f3', '#dbeafe', '#d1fae5', '#fed7d7']
           });
         } else {
+          console.log('EventProjection: No settings found, using defaults for event:', currentEvent.name);
           // Use event name in default title if no settings found
           setSettings(prev => ({
             ...prev,
@@ -90,7 +95,7 @@ const EventProjection = () => {
       };
 
       loadData();
-      const interval = setInterval(loadData, 2000);
+      const interval = setInterval(loadData, 3000); // Poll every 3 seconds to catch setting changes
       
       return () => clearInterval(interval);
     }
@@ -146,6 +151,17 @@ const EventProjection = () => {
       top: `${Math.max(15, Math.min(85, y))}%`,
     };
   };
+
+  if (loading) {
+    return (
+      <div className="w-screen h-screen flex items-center justify-center bg-gray-100">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading event...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!currentEvent) {
     return (
