@@ -60,12 +60,12 @@ const AdminDashboard = () => {
         </div>
 
         {/* Header with proper spacing from logo */}
-        <div className="flex justify-between items-center mb-6 mt-32">
+        <div className="flex justify-between items-start mb-6 mt-16">
           <div>
             <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
             <p className="text-gray-600">Manage workshop messages and settings</p>
           </div>
-          <div className="flex gap-4">
+          <div className="flex gap-4 mt-16">
             <Button 
               onClick={() => window.open('/projection', '_blank')}
               className="bg-green-600 hover:bg-green-700"
