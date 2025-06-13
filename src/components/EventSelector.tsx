@@ -28,7 +28,7 @@ const EventSelector = () => {
           <img 
             src="/ChatGPT Image 13 juin 2025, 15_24_09.png" 
             alt="Logo" 
-            className="h-20 w-auto"
+            className="h-48 w-auto"
           />
         </div>
 
@@ -47,27 +47,13 @@ const EventSelector = () => {
         <img 
           src="/ChatGPT Image 13 juin 2025, 15_24_09.png" 
           alt="Logo" 
-          className="h-20 w-auto"
+          className="h-48 w-auto"
         />
       </div>
 
       {/* Events Section */}
       <div className="container mx-auto px-6 py-20">
         <div className="max-w-6xl mx-auto">
-          <div className="mb-16 text-center">
-            <div className="flex justify-center items-center gap-3 mb-6">
-              <Building2 className="h-12 w-12 text-blue-600" />
-              <h1 className="text-5xl font-bold bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 bg-clip-text text-transparent">
-                Live Stickies
-              </h1>
-            </div>
-            <p className="text-xl text-slate-600 leading-relaxed max-w-2xl mx-auto mb-4">
-              Professional event management platform for corporate workshops and team collaboration
-            </p>
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">Select Your Workshop</h2>
-            <p className="text-slate-600 text-lg">Choose an event to participate or access administrative controls</p>
-          </div>
-
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {events.map((event) => (
               <Card key={event.id} className="bg-white/90 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
