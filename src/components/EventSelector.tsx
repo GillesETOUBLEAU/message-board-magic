@@ -22,28 +22,28 @@ const EventSelector = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-2 border-blue-600 border-t-transparent mx-auto mb-4"></div>
-          <p className="text-gray-600 text-lg">Loading events...</p>
+          <p className="text-slate-600 text-lg">Loading events...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Header Section */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="container mx-auto px-6 py-12">
+      <div className="bg-white/80 backdrop-blur-sm border-b border-slate-200">
+        <div className="container mx-auto px-6 py-16">
           <div className="text-center max-w-4xl mx-auto">
             <div className="flex justify-center items-center gap-3 mb-6">
-              <Building2 className="h-10 w-10 text-blue-600" />
-              <h1 className="text-4xl font-bold text-gray-900">
-                Workshop Management
+              <Building2 className="h-12 w-12 text-blue-600" />
+              <h1 className="text-5xl font-bold bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 bg-clip-text text-transparent">
+                Live Stickies
               </h1>
             </div>
-            <p className="text-xl text-gray-600 leading-relaxed">
+            <p className="text-xl text-slate-600 leading-relaxed max-w-2xl mx-auto">
               Professional event management platform for corporate workshops and team collaboration
             </p>
           </div>
@@ -51,42 +51,44 @@ const EventSelector = () => {
       </div>
 
       {/* Events Section */}
-      <div className="container mx-auto px-6 py-16">
+      <div className="container mx-auto px-6 py-20">
         <div className="max-w-6xl mx-auto">
-          <div className="mb-12">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Available Events</h2>
-            <p className="text-gray-600">Select an event to participate or manage administrative settings</p>
+          <div className="mb-16 text-center">
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">Select Your Workshop</h2>
+            <p className="text-slate-600 text-lg">Choose an event to participate or access administrative controls</p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {events.map((event) => (
-              <Card key={event.id} className="bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
-                <CardHeader className="pb-4 border-b border-gray-100">
-                  <CardTitle className="flex items-center gap-3 text-gray-900">
-                    <Calendar className="h-5 w-5 text-blue-600" />
+              <Card key={event.id} className="bg-white/90 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <CardHeader className="pb-4">
+                  <CardTitle className="flex items-center gap-3 text-slate-900">
+                    <div className="p-2 bg-blue-100 rounded-lg">
+                      <Calendar className="h-5 w-5 text-blue-600" />
+                    </div>
                     <span className="font-semibold text-lg">{event.name}</span>
                   </CardTitle>
                   {event.description && (
-                    <p className="text-gray-600 text-sm mt-2 leading-relaxed">
+                    <p className="text-slate-600 text-sm mt-3 leading-relaxed">
                       {event.description}
                     </p>
                   )}
                 </CardHeader>
                 
-                <CardContent className="pt-6">
+                <CardContent className="pt-2">
                   <div className="space-y-3">
                     <Button
                       onClick={() => handleEventSelect(event)}
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium"
+                      className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-2.5 shadow-md hover:shadow-lg transition-all duration-200"
                     >
                       <Users className="mr-2 h-4 w-4" />
-                      Join Event
+                      Join Workshop
                     </Button>
                     
                     <Button
                       onClick={() => handleAdminAccess(event)}
                       variant="outline"
-                      className="w-full border-gray-300 text-gray-700 hover:bg-gray-50 font-medium"
+                      className="w-full border-slate-300 text-slate-700 hover:bg-slate-50 font-medium py-2.5 transition-all duration-200"
                     >
                       <Settings className="mr-2 h-4 w-4" />
                       Manage Event
@@ -99,15 +101,17 @@ const EventSelector = () => {
 
           {events.length === 0 && (
             <div className="text-center py-20">
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 max-w-md mx-auto">
-                <Building2 className="h-16 w-16 text-gray-400 mx-auto mb-6" />
-                <h3 className="text-2xl font-semibold text-gray-900 mb-4">No Events Available</h3>
-                <p className="text-gray-600 mb-8 leading-relaxed">
+              <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border-0 p-16 max-w-lg mx-auto">
+                <div className="p-4 bg-slate-100 rounded-full w-fit mx-auto mb-8">
+                  <Building2 className="h-16 w-16 text-slate-400" />
+                </div>
+                <h3 className="text-2xl font-bold text-slate-900 mb-4">No Events Available</h3>
+                <p className="text-slate-600 mb-10 leading-relaxed text-lg">
                   Get started by creating your first corporate event or workshop.
                 </p>
                 <Button 
                   onClick={() => navigate('/admin')} 
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-8 py-3"
+                  className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium px-8 py-3 shadow-md hover:shadow-lg transition-all duration-200"
                 >
                   Create First Event
                 </Button>
@@ -118,9 +122,9 @@ const EventSelector = () => {
       </div>
 
       {/* Footer */}
-      <div className="bg-white border-t border-gray-200 mt-auto">
+      <div className="bg-white/80 backdrop-blur-sm border-t border-slate-200 mt-auto">
         <div className="container mx-auto px-6 py-8">
-          <div className="text-center text-gray-500 text-sm">
+          <div className="text-center text-slate-500 text-sm">
             <Building2 className="h-4 w-4 inline mr-2" />
             Professional Workshop Management Platform
           </div>
