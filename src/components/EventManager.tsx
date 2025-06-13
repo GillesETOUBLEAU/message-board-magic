@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -209,20 +208,20 @@ const EventManager = () => {
           </Card>
         )}
 
-        <div className="space-y-4">
+        <div className="space-y-6">
           {events.map((event) => {
             const isCurrentlyManaged = currentEvent?.id === event.id;
             
             return (
               <div 
                 key={event.id} 
-                className={`border rounded-lg ${isCurrentlyManaged ? 'border-blue-500 bg-blue-50' : ''}`}
+                className={`border rounded-lg p-6 ${isCurrentlyManaged ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}`}
               >
-                <div className="p-4">
-                  <div className="flex justify-between items-start mb-3">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <h3 className="font-semibold">{event.name}</h3>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1 min-w-0 mr-6">
+                      <div className="flex items-center gap-3 mb-3 flex-wrap">
+                        <h3 className="font-semibold text-lg">{event.name}</h3>
                         <Badge variant={event.is_active ? "default" : "secondary"}>
                           {event.is_active ? "Active" : "Inactive"}
                         </Badge>
@@ -236,33 +235,33 @@ const EventManager = () => {
                         )}
                       </div>
                       {event.description && (
-                        <p className="text-sm text-gray-600 mb-2">{event.description}</p>
+                        <p className="text-sm text-gray-600 mb-3">{event.description}</p>
                       )}
-                      <p className="text-xs text-gray-500">Slug: {event.slug}</p>
-                      <div className="flex items-center gap-2 mt-2">
+                      <p className="text-sm text-gray-500 mb-3">Slug: {event.slug}</p>
+                      <div className="flex items-center gap-3">
                         <span className="text-sm font-medium">Access Code:</span>
-                        <code className="bg-gray-100 px-2 py-1 rounded text-sm font-mono">
+                        <code className="bg-gray-100 px-3 py-2 rounded text-sm font-mono">
                           {event.access_code}
                         </code>
                         <Button
                           size="sm"
                           variant="ghost"
                           onClick={() => copyAccessCode(event.access_code)}
-                          className="h-6 w-6 p-0"
+                          className="h-8 w-8 p-0"
                         >
-                          <Copy className="h-3 w-3" />
+                          <Copy className="h-4 w-4" />
                         </Button>
                       </div>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex gap-3 flex-wrap">
                       {!isCurrentlyManaged && (
                         <Button
                           size="sm"
                           variant="default"
                           onClick={() => handleManageEvent(event)}
-                          className="bg-blue-600 hover:bg-blue-700"
+                          className="bg-blue-600 hover:bg-blue-700 min-w-[100px]"
                         >
-                          <Settings className="h-4 w-4 mr-1" />
+                          <Settings className="h-4 w-4 mr-2" />
                           Manage
                         </Button>
                       )}
@@ -270,22 +269,28 @@ const EventManager = () => {
                         size="sm"
                         variant="outline"
                         onClick={() => openProjection(event)}
+                        className="min-w-[80px]"
                       >
-                        <Eye className="h-4 w-4" />
+                        <Eye className="h-4 w-4 mr-2" />
+                        View
                       </Button>
                       <Button
                         size="sm"
                         variant="outline"
                         onClick={() => handleEdit(event)}
+                        className="min-w-[70px]"
                       >
-                        <Edit className="h-4 w-4" />
+                        <Edit className="h-4 w-4 mr-2" />
+                        Edit
                       </Button>
                       <Button
                         size="sm"
                         variant="destructive"
                         onClick={() => handleDelete(event.id)}
+                        className="min-w-[80px]"
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Trash2 className="h-4 w-4 mr-2" />
+                        Delete
                       </Button>
                     </div>
                   </div>
