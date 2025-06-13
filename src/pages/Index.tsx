@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Building2 } from 'lucide-react';
 import AccessCodeForm from '@/components/AccessCodeForm';
@@ -11,18 +12,18 @@ const Index = () => {
         <div className="container mx-auto px-6 py-16">
           <div className="text-center max-w-4xl mx-auto">
             <div className="flex justify-center items-center gap-8 mb-6">
-              {/* Left image replacing title */}
+              {/* Left image replacing title - much larger */}
               <img 
                 src="/LiveStickies.png" 
                 alt="Live Stickies Logo" 
-                className="h-24 w-auto opacity-90 filter brightness-95 saturate-110"
+                className="h-32 w-auto opacity-90 filter brightness-95 saturate-110"
               />
               
-              {/* Right image */}
+              {/* Right image - matching size */}
               <img 
                 src="/Stickies2.png" 
                 alt="Stickies Decoration" 
-                className="h-24 w-auto opacity-90 filter brightness-95 saturate-110"
+                className="h-32 w-auto opacity-90 filter brightness-95 saturate-110"
               />
             </div>
             <p className="text-xl text-slate-600 leading-relaxed max-w-2xl mx-auto">
