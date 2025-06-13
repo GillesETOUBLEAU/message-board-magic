@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -90,6 +89,15 @@ const AuthForm = ({ onAuth }: AuthFormProps) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+      {/* Logo */}
+      <div className="absolute top-4 right-4 z-10">
+        <img 
+          src="/ChatGPT Image 13 juin 2025, 15_24_09.png" 
+          alt="Logo" 
+          className="h-12 w-auto"
+        />
+      </div>
+
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold text-gray-800">
