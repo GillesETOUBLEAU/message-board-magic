@@ -1,22 +1,17 @@
-# Welcome to your Lovable project
+
+# Workshop Messages App
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/61d78f92-040d-4315-b6eb-7913430e93e4
+A real-time workshop messaging application built with React, TypeScript, and Supabase.
 
 ## How can I edit this code?
 
 There are several ways of editing your application.
 
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/61d78f92-040d-4315-b6eb-7913430e93e4) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
 **Use your preferred IDE**
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+If you want to work locally using your own IDE, you can clone this repo and push changes.
 
 The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
@@ -59,15 +54,38 @@ This project is built with:
 - React
 - shadcn-ui
 - Tailwind CSS
+- Supabase
+
+## Features
+
+- Real-time workshop messaging
+- Admin dashboard for message management
+- Live projection display for presentations
+- Message approval workflow
+- CSV/XLSX export functionality
+- Responsive design
+
+## Environment Setup
+
+1. Set up your Supabase project
+2. Configure environment variables
+3. Run database migrations
+4. Start the development server
 
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/61d78f92-040d-4315-b6eb-7913430e93e4) and click on Share -> Publish.
+This project can be deployed to any static hosting service like:
 
-## Can I connect a custom domain to my Lovable project?
+- Vercel
+- Netlify
+- GitHub Pages
+- AWS S3 + CloudFront
+- Any other static hosting provider
 
-Yes, you can!
+Build the project for production:
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+```sh
+npm run build
+```
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+The built files will be in the `dist` directory.
