@@ -52,7 +52,7 @@ export type Database = {
       }
       events: {
         Row: {
-          access_code: string | null
+          access_code: string
           access_mode: string
           created_at: string
           description: string | null
@@ -63,7 +63,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
-          access_code?: string | null
+          access_code: string
           access_mode?: string
           created_at?: string
           description?: string | null
@@ -74,7 +74,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
-          access_code?: string | null
+          access_code?: string
           access_mode?: string
           created_at?: string
           description?: string | null

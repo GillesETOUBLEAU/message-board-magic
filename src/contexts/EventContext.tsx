@@ -8,8 +8,8 @@ interface Event {
   description: string | null;
   slug: string;
   is_active: boolean;
-  access_code: string | null;
-  access_mode: 'open' | 'code_protected';
+  access_code: string; // Now always required
+  access_mode: 'code_protected'; // All events are now code_protected
   created_at: string;
   updated_at: string;
 }
@@ -20,6 +20,7 @@ interface EventContextType {
   events: Event[];
   loadEvents: () => Promise<void>;
   loading: boolean;
+  findEventByAccessCode: (code: string) => Promise<Event | null>;
 }
 
 const EventContext = createContext<EventContextType | undefined>(undefined);
@@ -48,21 +49,33 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
     if (error) {
       console.error('Error loading events:', error);
     } else {
-      // Type cast the data to ensure access_mode matches our union type
+      // All events are now code_protected by default
       const typedEvents: Event[] = (data || []).map(event => ({
         ...event,
-        access_mode: (event.access_mode || 'open') as 'open' | 'code_protected'
+        access_mode: 'code_protected' as const
       }));
       
       setEvents(typedEvents);
-      
-      // Set default event if none is selected
-      if (!currentEvent && typedEvents && typedEvents.length > 0) {
-        const defaultEvent = typedEvents.find(e => e.slug === 'default') || typedEvents[0];
-        setCurrentEvent(defaultEvent);
-      }
     }
     setLoading(false);
+  };
+
+  const findEventByAccessCode = async (code: string): Promise<Event | null> => {
+    const { data, error } = await supabase
+      .from('events')
+      .select('*')
+      .eq('access_code', code.toUpperCase())
+      .eq('is_active', true)
+      .single();
+    
+    if (error || !data) {
+      return null;
+    }
+    
+    return {
+      ...data,
+      access_mode: 'code_protected' as const
+    };
   };
 
   useEffect(() => {
@@ -75,7 +88,8 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
       setCurrentEvent,
       events,
       loadEvents,
-      loading
+      loading,
+      findEventByAccessCode
     }}>
       {children}
     </EventContext.Provider>

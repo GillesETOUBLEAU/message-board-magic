@@ -5,8 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, Edit, Trash2, Eye, Copy, RefreshCw, QrCode } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, Copy, QrCode } from 'lucide-react';
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useEvent } from "@/contexts/EventContext";
@@ -19,8 +18,7 @@ const EventManager = () => {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    slug: '',
-    accessMode: 'open' as 'open' | 'code_protected'
+    slug: ''
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -33,24 +31,20 @@ const EventManager = () => {
 
     const slug = formData.slug.toLowerCase().replace(/[^a-z0-9-]/g, '-');
     
-    // Generate access code if code_protected mode is selected
-    const accessCode = formData.accessMode === 'code_protected' 
-      ? Math.random().toString(36).substring(2, 8).toUpperCase()
-      : null;
+    // Always generate access code since all events are now code_protected
+    const accessCode = Math.random().toString(36).substring(2, 8).toUpperCase();
     
     if (editingEvent) {
       const updateData: any = {
         name: formData.name,
         description: formData.description,
         slug: slug,
-        access_mode: formData.accessMode
+        access_mode: 'code_protected'
       };
       
-      // Only update access_code if switching to code_protected mode and no code exists
-      if (formData.accessMode === 'code_protected' && !editingEvent.access_code) {
+      // Only update access_code if no code exists
+      if (!editingEvent.access_code) {
         updateData.access_code = accessCode;
-      } else if (formData.accessMode === 'open') {
-        updateData.access_code = null;
       }
       
       const { error } = await supabase
@@ -72,7 +66,7 @@ const EventManager = () => {
           name: formData.name,
           description: formData.description,
           slug: slug,
-          access_mode: formData.accessMode,
+          access_mode: 'code_protected',
           access_code: accessCode,
           is_active: true
         });
@@ -86,11 +80,11 @@ const EventManager = () => {
         return;
       }
       
-      toast.success("Event created successfully");
+      toast.success(`Event created successfully! Access code: ${accessCode}`);
       setShowCreateForm(false);
     }
     
-    setFormData({ name: '', description: '', slug: '', accessMode: 'open' });
+    setFormData({ name: '', description: '', slug: '' });
     loadEvents();
   };
 
@@ -99,8 +93,7 @@ const EventManager = () => {
     setFormData({
       name: event.name,
       description: event.description || '',
-      slug: event.slug,
-      accessMode: event.access_mode || 'open'
+      slug: event.slug
     });
     setShowCreateForm(true);
   };
@@ -128,6 +121,11 @@ const EventManager = () => {
     window.open(`/event/${event.slug}/projection`, '_blank');
   };
 
+  const copyAccessCode = (code: string) => {
+    navigator.clipboard.writeText(code);
+    toast.success("Access code copied to clipboard!");
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -137,7 +135,7 @@ const EventManager = () => {
             onClick={() => {
               setShowCreateForm(true);
               setEditingEvent(null);
-              setFormData({ name: '', description: '', slug: '', accessMode: 'open' });
+              setFormData({ name: '', description: '', slug: '' });
             }}
             size="sm"
           >
@@ -173,33 +171,17 @@ const EventManager = () => {
                   />
                 </div>
                 <div>
-                  <Select
-                    value={formData.accessMode}
-                    onValueChange={(value: 'open' | 'code_protected') => 
-                      setFormData({ ...formData, accessMode: value })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select access mode" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="open">Open Access</SelectItem>
-                      <SelectItem value="code_protected">Access Code Required</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <p className="text-sm text-gray-500 mt-1">
-                    {formData.accessMode === 'open' 
-                      ? 'Anyone can join this event'
-                      : 'Users need an access code to join this event'
-                    }
-                  </p>
-                </div>
-                <div>
                   <Textarea
                     placeholder="Event Description (optional)"
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     rows={3}
                   />
+                </div>
+                <div className="bg-blue-50 p-3 rounded-lg">
+                  <p className="text-sm text-blue-800">
+                    <strong>Note:</strong> All events require an access code. A unique code will be generated automatically.
+                  </p>
                 </div>
                 <div className="flex gap-2">
                   <Button type="submit">
@@ -232,14 +214,28 @@ const EventManager = () => {
                       <Badge variant={event.is_active ? "default" : "secondary"}>
                         {event.is_active ? "Active" : "Inactive"}
                       </Badge>
-                      <Badge variant={event.access_mode === 'code_protected' ? "destructive" : "outline"}>
-                        {event.access_mode === 'code_protected' ? "Code Protected" : "Open Access"}
+                      <Badge variant="destructive">
+                        Code Protected
                       </Badge>
                     </div>
                     {event.description && (
                       <p className="text-sm text-gray-600 mb-2">{event.description}</p>
                     )}
                     <p className="text-xs text-gray-500">Slug: {event.slug}</p>
+                    <div className="flex items-center gap-2 mt-2">
+                      <span className="text-sm font-medium">Access Code:</span>
+                      <code className="bg-gray-100 px-2 py-1 rounded text-sm font-mono">
+                        {event.access_code}
+                      </code>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => copyAccessCode(event.access_code)}
+                        className="h-6 w-6 p-0"
+                      >
+                        <Copy className="h-3 w-3" />
+                      </Button>
+                    </div>
                   </div>
                   <div className="flex gap-2">
                     <Button
@@ -266,9 +262,7 @@ const EventManager = () => {
                   </div>
                 </div>
                 
-                {event.access_mode === 'code_protected' && (
-                  <AccessCodeManager event={event} onCodeUpdated={loadEvents} />
-                )}
+                <AccessCodeManager event={event} onCodeUpdated={loadEvents} />
               </div>
             </div>
           ))}
