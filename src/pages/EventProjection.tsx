@@ -1,8 +1,8 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { supabase } from "@/integrations/supabase/client";
 import { useEvent } from "@/contexts/EventContext";
+import QRCode from 'qrcode';
 
 interface Message {
   id: string;
@@ -36,6 +36,7 @@ const EventProjection = () => {
     sticky_note_colors: ['#fef3c7', '#fce7f3', '#dbeafe', '#d1fae5', '#fed7d7']
   });
   const [displayedMessages, setDisplayedMessages] = useState<MessageWithColor[]>([]);
+  const qrCanvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     if (!loading && events.length > 0 && eventSlug) {
@@ -45,6 +46,25 @@ const EventProjection = () => {
       }
     }
   }, [events, eventSlug, loading, setCurrentEvent]);
+
+  useEffect(() => {
+    if (currentEvent && qrCanvasRef.current) {
+      // Generate QR code for the event dashboard
+      const eventUrl = `${window.location.origin}/event/${currentEvent.slug}`;
+      QRCode.toCanvas(qrCanvasRef.current, eventUrl, {
+        width: 120,
+        margin: 1,
+        color: {
+          dark: '#1f2937',
+          light: '#ffffff'
+        }
+      }, (error) => {
+        if (error) {
+          console.error('QR Code generation error:', error);
+        }
+      });
+    }
+  }, [currentEvent]);
 
   useEffect(() => {
     if (currentEvent) {
@@ -222,18 +242,31 @@ const EventProjection = () => {
         />
       </div>
 
-      {/* Header */}
-      <div className="absolute top-8 left-8 right-8 text-center z-10">
-        <h1 className="text-4xl font-bold text-gray-800 mb-2">
-          {settings.title}
-        </h1>
-        <p className="text-xl text-gray-600">
-          {displayedMessages.length} contributions from our community
-        </p>
+      {/* Header with Title and QR Code */}
+      <div className="absolute top-8 left-8 right-8 z-10">
+        <div className="flex items-center justify-center gap-8 mb-4">
+          <div className="text-center flex-1">
+            <h1 className="text-4xl font-bold text-gray-800 mb-2">
+              {settings.title}
+            </h1>
+            <p className="text-xl text-gray-600">
+              {displayedMessages.length} contributions from our community
+            </p>
+          </div>
+          
+          {/* QR Code */}
+          <div className="bg-white p-4 rounded-lg shadow-lg">
+            <div className="text-center mb-2">
+              <p className="text-sm font-semibold text-gray-700">Join with your phone</p>
+              <p className="text-xs text-gray-500">Code: {currentEvent.access_code}</p>
+            </div>
+            <canvas ref={qrCanvasRef} className="mx-auto" />
+          </div>
+        </div>
       </div>
 
       {/* Sticky Notes */}
-      <div className="absolute inset-0 pt-32">
+      <div className="absolute inset-0 pt-40">
         {displayedMessages.map((message, index) => {
           const position = getGridPosition(index);
           
