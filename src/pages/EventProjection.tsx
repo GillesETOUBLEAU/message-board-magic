@@ -245,15 +245,6 @@ const EventProjection = () => {
       {/* Header with Title and QR Code */}
       <div className="absolute top-8 left-8 right-8 z-10">
         <div className="flex items-center justify-center gap-8 mb-4">
-          <div className="text-center flex-1">
-            <h1 className="text-4xl font-bold text-gray-800 mb-2">
-              {settings.title}
-            </h1>
-            <p className="text-xl text-gray-600">
-              {displayedMessages.length} contributions from our community
-            </p>
-          </div>
-          
           {/* QR Code */}
           <div className="bg-white p-4 rounded-lg shadow-lg">
             <div className="text-center mb-2">
@@ -261,6 +252,15 @@ const EventProjection = () => {
               <p className="text-xs text-gray-500">Code: {currentEvent.access_code}</p>
             </div>
             <canvas ref={qrCanvasRef} className="mx-auto" />
+          </div>
+          
+          <div className="text-center flex-1">
+            <h1 className="text-4xl font-bold text-gray-800 mb-2">
+              {settings.title}
+            </h1>
+            <p className="text-xl text-gray-600">
+              {displayedMessages.length} contributions from our community
+            </p>
           </div>
         </div>
       </div>
