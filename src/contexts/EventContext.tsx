@@ -8,6 +8,8 @@ interface Event {
   description: string | null;
   slug: string;
   is_active: boolean;
+  access_code: string | null;
+  access_mode: 'open' | 'code_protected';
   created_at: string;
   updated_at: string;
 }
