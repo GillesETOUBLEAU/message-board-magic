@@ -155,7 +155,7 @@ const EventAdmin = () => {
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid lg:grid-cols-3 gap-8 mt-12">
           <div className="lg:col-span-2">
             <MessageManager />
           </div>
