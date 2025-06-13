@@ -160,11 +160,11 @@ const EventAdmin = () => {
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
+        <div className="grid lg:grid-cols-5 gap-8">
+          <div className="lg:col-span-3">
             <MessageManager />
           </div>
-          <div className="space-y-6">
+          <div className="lg:col-span-2 space-y-6">
             <ProjectionSettingsPanel />
             <EventManager />
           </div>
