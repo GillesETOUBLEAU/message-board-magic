@@ -6,6 +6,8 @@ import ColorPicker from './ColorPicker';
 import StickyNoteColorGrid from './StickyNoteColorGrid';
 
 interface ProjectionSettings {
+  id?: string;
+  event_id: string;
   title: string;
   background_color: string;
   font_size: number;
