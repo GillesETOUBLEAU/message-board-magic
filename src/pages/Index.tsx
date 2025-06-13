@@ -10,25 +10,27 @@ const Index = () => {
       {/* Header Section */}
       <div className="bg-white/80 backdrop-blur-sm border-b border-slate-200 relative">
         <div className="container mx-auto px-6 py-16">
-          <div className="text-center max-w-4xl mx-auto">
-            <div className="flex justify-center items-center gap-8 mb-6">
-              {/* Left image replacing title - much larger */}
+          <div className="grid grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {/* Left column - Image */}
+            <div className="flex justify-center items-center">
               <img 
                 src="/LiveStickies.png" 
                 alt="Live Stickies Logo" 
                 className="h-32 w-auto opacity-90 filter brightness-95 saturate-110"
               />
-              
-              {/* Right image - matching size */}
+            </div>
+            
+            {/* Right column - Text on blue background */}
+            <div className="bg-blue-500 rounded-lg p-8 flex flex-col justify-center items-center text-white">
               <img 
                 src="/Stickies2.png" 
                 alt="Stickies Decoration" 
-                className="h-32 w-auto opacity-90 filter brightness-95 saturate-110"
+                className="h-16 w-auto mb-4 opacity-90 filter brightness-95 saturate-110"
               />
+              <p className="text-xl leading-relaxed text-center">
+                Interactive workshop platform for real-time collaboration and engagement
+              </p>
             </div>
-            <p className="text-xl text-slate-600 leading-relaxed max-w-2xl mx-auto">
-              Interactive workshop platform for real-time collaboration and engagement
-            </p>
           </div>
         </div>
       </div>
