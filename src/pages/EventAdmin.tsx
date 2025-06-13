@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -65,8 +66,8 @@ const EventAdmin = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#E6F3FF' }}>
-        {/* Logo */}
-        <div className="absolute top-6 right-6 z-10">
+        {/* Logo positioned higher */}
+        <div className="absolute top-2 right-6 z-10">
           <img 
             src="/ChatGPT Image 13 juin 2025, 15_24_09.png" 
             alt="Logo" 
@@ -94,8 +95,8 @@ const EventAdmin = () => {
     return (
       <div className="min-h-screen" style={{ backgroundColor: '#E6F3FF' }}>
         <div className="container mx-auto px-4 py-8">
-          {/* Logo positioned in upper right corner */}
-          <div className="absolute top-6 right-6 z-10">
+          {/* Logo positioned higher */}
+          <div className="absolute top-2 right-6 z-10">
             <img 
               src="/ChatGPT Image 13 juin 2025, 15_24_09.png" 
               alt="Logo" 
@@ -128,8 +129,8 @@ const EventAdmin = () => {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#E6F3FF' }}>
       <div className="container mx-auto px-4 py-8">
-        {/* Logo positioned in upper right corner */}
-        <div className="absolute top-6 right-6 z-10">
+        {/* Logo positioned higher */}
+        <div className="absolute top-2 right-6 z-10">
           <img 
             src="/ChatGPT Image 13 juin 2025, 15_24_09.png" 
             alt="Logo" 
@@ -175,3 +176,4 @@ const EventAdmin = () => {
 };
 
 export default EventAdmin;
+
