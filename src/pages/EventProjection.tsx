@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { supabase } from "@/integrations/supabase/client";
@@ -162,6 +161,10 @@ const EventProjection = () => {
             src="/ChatGPT Image 13 juin 2025, 15_24_09.png" 
             alt="Logo" 
             className="h-12 w-auto"
+            onError={(e) => {
+              console.error('Logo failed to load:', e);
+              e.currentTarget.style.display = 'none';
+            }}
           />
         </div>
 
@@ -182,6 +185,10 @@ const EventProjection = () => {
             src="/ChatGPT Image 13 juin 2025, 15_24_09.png" 
             alt="Logo" 
             className="h-12 w-auto"
+            onError={(e) => {
+              console.error('Logo failed to load:', e);
+              e.currentTarget.style.display = 'none';
+            }}
           />
         </div>
 
@@ -207,6 +214,10 @@ const EventProjection = () => {
           src="/ChatGPT Image 13 juin 2025, 15_24_09.png" 
           alt="Logo" 
           className="h-12 w-auto"
+          onError={(e) => {
+            console.error('Logo failed to load:', e);
+            e.currentTarget.style.display = 'none';
+          }}
         />
       </div>
 
