@@ -8,31 +8,12 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       {/* Header Section */}
-      <div className="bg-white/80 backdrop-blur-sm border-b border-slate-200 relative">
-        <div className="container mx-auto px-6 py-16">
-          <div className="grid grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {/* Left column - Image */}
-            <div className="flex justify-center items-center">
-              <img 
-                src="/LiveStickies.png" 
-                alt="Live Stickies Logo" 
-                className="h-32 w-auto opacity-90 filter brightness-95 saturate-110"
-              />
-            </div>
-            
-            {/* Right column - Text on blue background */}
-            <div className="bg-blue-500 rounded-lg p-8 flex flex-col justify-center items-center text-white">
-              <img 
-                src="/Stickies2.png" 
-                alt="Stickies Decoration" 
-                className="h-16 w-auto mb-4 opacity-90 filter brightness-95 saturate-110"
-              />
-              <p className="text-xl leading-relaxed text-center">
-                Interactive workshop platform for real-time collaboration and engagement
-              </p>
-            </div>
-          </div>
-        </div>
+      <div className="w-full">
+        <img 
+          src="/HeaderSticky.png" 
+          alt="Header" 
+          className="w-full h-auto object-cover"
+        />
       </div>
 
       {/* Main Access Section */}
