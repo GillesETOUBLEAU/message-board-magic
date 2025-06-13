@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Building2 } from 'lucide-react';
 import AccessCodeForm from '@/components/AccessCodeForm';
@@ -9,31 +8,22 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       {/* Header Section */}
       <div className="bg-white/80 backdrop-blur-sm border-b border-slate-200 relative">
-        {/* Left corner image */}
-        <div className="absolute top-4 left-4 z-10">
-          <img 
-            src="/LiveStickies.png" 
-            alt="Live Stickies Logo" 
-            className="h-16 w-auto opacity-80 filter brightness-95 saturate-110"
-          />
-        </div>
-        
-        {/* Right corner image */}
-        <div className="absolute top-4 right-4 z-10">
-          <img 
-            src="/Stickies2.png" 
-            alt="Stickies Decoration" 
-            className="h-16 w-auto opacity-80 filter brightness-95 saturate-110"
-          />
-        </div>
-
         <div className="container mx-auto px-6 py-16">
           <div className="text-center max-w-4xl mx-auto">
-            <div className="flex justify-center items-center gap-3 mb-6">
-              <Building2 className="h-12 w-12 text-blue-600" />
-              <h1 className="text-5xl font-bold bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 bg-clip-text text-transparent">
-                Live Stickies
-              </h1>
+            <div className="flex justify-center items-center gap-8 mb-6">
+              {/* Left image replacing title */}
+              <img 
+                src="/LiveStickies.png" 
+                alt="Live Stickies Logo" 
+                className="h-24 w-auto opacity-90 filter brightness-95 saturate-110"
+              />
+              
+              {/* Right image */}
+              <img 
+                src="/Stickies2.png" 
+                alt="Stickies Decoration" 
+                className="h-24 w-auto opacity-90 filter brightness-95 saturate-110"
+              />
             </div>
             <p className="text-xl text-slate-600 leading-relaxed max-w-2xl mx-auto">
               Interactive workshop platform for real-time collaboration and engagement
