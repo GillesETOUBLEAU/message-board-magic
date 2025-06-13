@@ -90,8 +90,8 @@ const AuthForm = ({ onAuth }: AuthFormProps) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      {/* Logo */}
-      <div className="absolute top-4 right-4 z-10">
+      {/* Logo positioned in upper right corner */}
+      <div className="absolute top-6 right-6 z-10">
         <img 
           src="/ChatGPT Image 13 juin 2025, 15_24_09.png" 
           alt="Logo" 
