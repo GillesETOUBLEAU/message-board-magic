@@ -5,12 +5,14 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useEvent } from "@/contexts/EventContext";
 
 interface AuthFormProps {
   onAuth: (userData: { name: string; email: string }) => void;
 }
 
 const AuthForm = ({ onAuth }: AuthFormProps) => {
+  const { currentEvent } = useEvent();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
 
@@ -23,13 +25,19 @@ const AuthForm = ({ onAuth }: AuthFormProps) => {
     
     const userData = { name, email };
     
-    // Store user in workshop_users table
-    const { error } = await supabase
-      .from('workshop_users')
-      .upsert({ name, email }, { onConflict: 'email' });
-    
-    if (error) {
-      console.error('Error storing user:', error);
+    // Store user in workshop_users table with event_id if available
+    if (currentEvent) {
+      const { error } = await supabase
+        .from('workshop_users')
+        .upsert({ 
+          name, 
+          email, 
+          event_id: currentEvent.id 
+        }, { onConflict: 'email' });
+      
+      if (error) {
+        console.error('Error storing user:', error);
+      }
     }
     
     onAuth(userData);
@@ -43,7 +51,9 @@ const AuthForm = ({ onAuth }: AuthFormProps) => {
           <CardTitle className="text-2xl font-bold text-gray-800">
             Join Workshop
           </CardTitle>
-          <p className="text-gray-600">Enter your details to participate</p>
+          <p className="text-gray-600">
+            {currentEvent ? `Enter your details to participate in "${currentEvent.name}"` : 'Enter your details to participate'}
+          </p>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleAuth} className="space-y-4">

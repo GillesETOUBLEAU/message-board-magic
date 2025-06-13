@@ -9,12 +9,43 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      events: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          name: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       messages: {
         Row: {
           author_email: string
           author_name: string
           content: string
           created_at: string | null
+          event_id: string
           id: string
           status: Database["public"]["Enums"]["message_status"] | null
           updated_at: string | null
@@ -24,6 +55,7 @@ export type Database = {
           author_name: string
           content: string
           created_at?: string | null
+          event_id: string
           id?: string
           status?: Database["public"]["Enums"]["message_status"] | null
           updated_at?: string | null
@@ -33,11 +65,20 @@ export type Database = {
           author_name?: string
           content?: string
           created_at?: string | null
+          event_id?: string
           id?: string
           status?: Database["public"]["Enums"]["message_status"] | null
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "messages_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -66,6 +107,7 @@ export type Database = {
       projection_settings: {
         Row: {
           background_color: string | null
+          event_id: string
           font_size: number | null
           id: string
           sticky_note_colors: Json | null
@@ -74,6 +116,7 @@ export type Database = {
         }
         Insert: {
           background_color?: string | null
+          event_id: string
           font_size?: number | null
           id?: string
           sticky_note_colors?: Json | null
@@ -82,34 +125,54 @@ export type Database = {
         }
         Update: {
           background_color?: string | null
+          event_id?: string
           font_size?: number | null
           id?: string
           sticky_note_colors?: Json | null
           title?: string | null
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "projection_settings_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: true
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       workshop_users: {
         Row: {
           created_at: string | null
           email: string
+          event_id: string | null
           id: string
           name: string
         }
         Insert: {
           created_at?: string | null
           email: string
+          event_id?: string | null
           id?: string
           name: string
         }
         Update: {
           created_at?: string | null
           email?: string
+          event_id?: string | null
           id?: string
           name?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "workshop_users_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

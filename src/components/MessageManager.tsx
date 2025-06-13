@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -6,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Check, X, Trash2, Download } from 'lucide-react';
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useEvent } from "@/contexts/EventContext";
 
 interface Message {
   id: string;
@@ -14,19 +14,26 @@ interface Message {
   author_email: string;
   status: 'pending' | 'approved' | 'rejected';
   created_at: string;
+  event_id: string;
 }
 
 const MessageManager = () => {
+  const { currentEvent } = useEvent();
   const [messages, setMessages] = useState<Message[]>([]);
 
   useEffect(() => {
-    loadMessages();
-  }, []);
+    if (currentEvent) {
+      loadMessages();
+    }
+  }, [currentEvent]);
 
   const loadMessages = async () => {
+    if (!currentEvent) return;
+    
     const { data, error } = await supabase
       .from('messages')
       .select('*')
+      .eq('event_id', currentEvent.id)
       .order('created_at', { ascending: false });
     
     if (error) {
@@ -88,7 +95,7 @@ const MessageManager = () => {
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
     link.setAttribute('href', url);
-    link.setAttribute('download', `approved_messages_${new Date().toISOString().split('T')[0]}.csv`);
+    link.setAttribute('download', `approved_messages_${currentEvent?.slug}_${new Date().toISOString().split('T')[0]}.csv`);
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
@@ -105,7 +112,6 @@ const MessageManager = () => {
       return;
     }
 
-    // Create a simple tab-separated values format that Excel can open
     const header = 'Name\tEmail\tMessage\tDate\n';
     const data = approvedMessages.map(message => {
       const date = new Date(message.created_at).toLocaleDateString();
@@ -117,7 +123,7 @@ const MessageManager = () => {
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
     link.setAttribute('href', url);
-    link.setAttribute('download', `approved_messages_${new Date().toISOString().split('T')[0]}.xlsx`);
+    link.setAttribute('download', `approved_messages_${currentEvent?.slug}_${new Date().toISOString().split('T')[0]}.xlsx`);
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
@@ -126,11 +132,27 @@ const MessageManager = () => {
     toast.success("XLSX file downloaded successfully!");
   };
 
+  if (!currentEvent) {
+    return (
+      <Card>
+        <CardContent className="text-center py-8">
+          <p className="text-gray-500">No event selected</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
   const pendingMessages = messages.filter(m => m.status === 'pending');
   const approvedMessages = messages.filter(m => m.status === 'approved');
 
   return (
     <div className="space-y-6">
+      <div className="mb-4">
+        <h2 className="text-lg font-semibold text-gray-800">
+          Managing: {currentEvent.name}
+        </h2>
+      </div>
+
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">

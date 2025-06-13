@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Send } from 'lucide-react';
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useEvent } from "@/contexts/EventContext";
 
 interface MessageFormProps {
   user: { name: string; email: string };
@@ -13,10 +14,17 @@ interface MessageFormProps {
 }
 
 const MessageForm = ({ user, onMessageSent }: MessageFormProps) => {
+  const { currentEvent } = useEvent();
   const [newMessage, setNewMessage] = useState('');
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!currentEvent) {
+      toast.error("No event selected");
+      return;
+    }
+    
     if (!newMessage.trim()) {
       toast.error("Please enter a message");
       return;
@@ -33,6 +41,7 @@ const MessageForm = ({ user, onMessageSent }: MessageFormProps) => {
         content: newMessage,
         author_name: user.name,
         author_email: user.email,
+        event_id: currentEvent.id,
         status: 'pending'
       });
 
@@ -54,7 +63,9 @@ const MessageForm = ({ user, onMessageSent }: MessageFormProps) => {
           <Send className="h-5 w-5" />
           Send Message
         </CardTitle>
-        <p className="text-sm text-gray-600">Share your thoughts (max 200 characters)</p>
+        <p className="text-sm text-gray-600">
+          Share your thoughts for "{currentEvent?.name}" (max 200 characters)
+        </p>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSendMessage} className="space-y-4">
