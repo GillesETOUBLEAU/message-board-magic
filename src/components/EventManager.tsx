@@ -132,10 +132,10 @@ const EventManager = () => {
   };
 
   return (
-    <Card>
-      <CardHeader>
+    <Card className="w-full">
+      <CardHeader className="pb-4">
         <CardTitle className="flex items-center justify-between">
-          <span>Event Management</span>
+          <span className="text-xl">Event Management</span>
           <Button
             onClick={() => {
               setShowCreateForm(true);
@@ -143,53 +143,51 @@ const EventManager = () => {
               setFormData({ name: '', description: '', slug: '' });
             }}
             size="sm"
+            className="gap-2"
           >
-            <Plus className="h-4 w-4 mr-2" />
+            <Plus className="h-4 w-4" />
             New Event
           </Button>
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="space-y-6">
         {showCreateForm && (
-          <Card className="mb-6">
-            <CardHeader>
-              <CardTitle className="text-lg">
+          <Card className="border-2 border-blue-200 bg-blue-50/30">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-lg text-blue-800">
                 {editingEvent ? 'Edit Event' : 'Create New Event'}
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <Input
-                    placeholder="Event Name"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    required
-                  />
-                </div>
-                <div>
-                  <Input
-                    placeholder="Event Slug (URL-friendly identifier)"
-                    value={formData.slug}
-                    onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                    required
-                  />
-                </div>
-                <div>
-                  <Textarea
-                    placeholder="Event Description (optional)"
-                    value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    rows={3}
-                  />
-                </div>
-                <div className="bg-blue-50 p-3 rounded-lg">
-                  <p className="text-sm text-blue-800">
+                <Input
+                  placeholder="Event Name"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  required
+                  className="bg-white"
+                />
+                <Input
+                  placeholder="Event Slug (URL-friendly identifier)"
+                  value={formData.slug}
+                  onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                  required
+                  className="bg-white"
+                />
+                <Textarea
+                  placeholder="Event Description (optional)"
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  rows={3}
+                  className="bg-white"
+                />
+                <div className="bg-blue-100 p-4 rounded-lg border border-blue-200">
+                  <p className="text-sm text-blue-700">
                     <strong>Note:</strong> All events require an access code. A unique code will be generated automatically.
                   </p>
                 </div>
-                <div className="flex gap-2">
-                  <Button type="submit">
+                <div className="flex gap-3 pt-2">
+                  <Button type="submit" className="px-6">
                     {editingEvent ? 'Update Event' : 'Create Event'}
                   </Button>
                   <Button
@@ -199,6 +197,7 @@ const EventManager = () => {
                       setShowCreateForm(false);
                       setEditingEvent(null);
                     }}
+                    className="px-6"
                   >
                     Cancel
                   </Button>
@@ -213,55 +212,74 @@ const EventManager = () => {
             const isCurrentlyManaged = currentEvent?.id === event.id;
             
             return (
-              <div 
+              <Card 
                 key={event.id} 
-                className={`border rounded-lg p-6 ${isCurrentlyManaged ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}`}
+                className={`transition-all duration-200 ${
+                  isCurrentlyManaged 
+                    ? 'border-2 border-blue-400 bg-blue-50/50 shadow-md' 
+                    : 'border border-gray-200 hover:shadow-sm'
+                }`}
               >
-                <div className="space-y-4">
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1 min-w-0 mr-6">
-                      <div className="flex items-center gap-3 mb-3 flex-wrap">
-                        <h3 className="font-semibold text-lg">{event.name}</h3>
-                        <Badge variant={event.is_active ? "default" : "secondary"}>
-                          {event.is_active ? "Active" : "Inactive"}
-                        </Badge>
-                        <Badge variant="destructive">
-                          Code Protected
-                        </Badge>
-                        {isCurrentlyManaged && (
-                          <Badge className="bg-blue-600">
-                            Currently Managing
-                          </Badge>
+                <CardContent className="p-6">
+                  <div className="space-y-5">
+                    {/* Header Section */}
+                    <div className="flex justify-between items-start gap-6">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-3 mb-3 flex-wrap">
+                          <h3 className="font-semibold text-xl text-gray-800">{event.name}</h3>
+                          <div className="flex gap-2">
+                            <Badge variant={event.is_active ? "default" : "secondary"} className="px-3 py-1">
+                              {event.is_active ? "Active" : "Inactive"}
+                            </Badge>
+                            <Badge variant="destructive" className="px-3 py-1">
+                              Code Protected
+                            </Badge>
+                            {isCurrentlyManaged && (
+                              <Badge className="bg-blue-600 hover:bg-blue-700 px-3 py-1">
+                                Currently Managing
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
+                        {event.description && (
+                          <p className="text-gray-600 mb-3 leading-relaxed">{event.description}</p>
                         )}
+                        <p className="text-sm text-gray-500 mb-4">
+                          <span className="font-medium">Slug:</span> {event.slug}
+                        </p>
                       </div>
-                      {event.description && (
-                        <p className="text-sm text-gray-600 mb-3">{event.description}</p>
-                      )}
-                      <p className="text-sm text-gray-500 mb-3">Slug: {event.slug}</p>
-                      <div className="flex items-center gap-3">
-                        <span className="text-sm font-medium">Access Code:</span>
-                        <code className="bg-gray-100 px-3 py-2 rounded text-sm font-mono">
-                          {event.access_code}
-                        </code>
+                    </div>
+
+                    {/* Access Code Section */}
+                    <div className="bg-gray-50 p-4 rounded-lg border">
+                      <div className="flex items-center justify-between gap-4">
+                        <div className="flex items-center gap-3">
+                          <span className="font-medium text-gray-700">Access Code:</span>
+                          <code className="bg-white px-4 py-2 rounded border font-mono text-sm font-semibold tracking-wider">
+                            {event.access_code}
+                          </code>
+                        </div>
                         <Button
                           size="sm"
-                          variant="ghost"
+                          variant="outline"
                           onClick={() => copyAccessCode(event.access_code)}
-                          className="h-8 w-8 p-0"
+                          className="gap-2"
                         >
                           <Copy className="h-4 w-4" />
+                          Copy
                         </Button>
                       </div>
                     </div>
-                    <div className="flex gap-3 flex-wrap">
+
+                    {/* Action Buttons */}
+                    <div className="flex gap-3 flex-wrap pt-2">
                       {!isCurrentlyManaged && (
                         <Button
                           size="sm"
-                          variant="default"
                           onClick={() => handleManageEvent(event)}
-                          className="bg-blue-600 hover:bg-blue-700 min-w-[100px]"
+                          className="bg-blue-600 hover:bg-blue-700 gap-2 px-4 py-2"
                         >
-                          <Settings className="h-4 w-4 mr-2" />
+                          <Settings className="h-4 w-4" />
                           Manage
                         </Button>
                       )}
@@ -269,35 +287,35 @@ const EventManager = () => {
                         size="sm"
                         variant="outline"
                         onClick={() => openProjection(event)}
-                        className="min-w-[80px]"
+                        className="gap-2 px-4 py-2"
                       >
-                        <Eye className="h-4 w-4 mr-2" />
+                        <Eye className="h-4 w-4" />
                         View
                       </Button>
                       <Button
                         size="sm"
                         variant="outline"
                         onClick={() => handleEdit(event)}
-                        className="min-w-[70px]"
+                        className="gap-2 px-4 py-2"
                       >
-                        <Edit className="h-4 w-4 mr-2" />
+                        <Edit className="h-4 w-4" />
                         Edit
                       </Button>
                       <Button
                         size="sm"
                         variant="destructive"
                         onClick={() => handleDelete(event.id)}
-                        className="min-w-[80px]"
+                        className="gap-2 px-4 py-2"
                       >
-                        <Trash2 className="h-4 w-4 mr-2" />
+                        <Trash2 className="h-4 w-4" />
                         Delete
                       </Button>
                     </div>
+                    
+                    <AccessCodeManager event={event} onCodeUpdated={loadEvents} />
                   </div>
-                  
-                  <AccessCodeManager event={event} onCodeUpdated={loadEvents} />
-                </div>
-              </div>
+                </CardContent>
+              </Card>
             );
           })}
         </div>
