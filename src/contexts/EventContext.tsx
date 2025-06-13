@@ -48,11 +48,17 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
     if (error) {
       console.error('Error loading events:', error);
     } else {
-      setEvents(data || []);
+      // Type cast the data to ensure access_mode matches our union type
+      const typedEvents: Event[] = (data || []).map(event => ({
+        ...event,
+        access_mode: (event.access_mode || 'open') as 'open' | 'code_protected'
+      }));
+      
+      setEvents(typedEvents);
       
       // Set default event if none is selected
-      if (!currentEvent && data && data.length > 0) {
-        const defaultEvent = data.find(e => e.slug === 'default') || data[0];
+      if (!currentEvent && typedEvents && typedEvents.length > 0) {
+        const defaultEvent = typedEvents.find(e => e.slug === 'default') || typedEvents[0];
         setCurrentEvent(defaultEvent);
       }
     }
