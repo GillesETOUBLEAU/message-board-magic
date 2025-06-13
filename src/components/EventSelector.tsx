@@ -51,8 +51,13 @@ const EventSelector = () => {
         />
       </div>
 
+      {/* Page Title */}
+      <div className="container mx-auto px-6 pt-20 pb-8">
+        <h1 className="text-5xl font-bold text-slate-900 text-center">Events</h1>
+      </div>
+
       {/* Events Section */}
-      <div className="container mx-auto px-6 py-20">
+      <div className="container mx-auto px-6 py-12">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {events.map((event) => (
