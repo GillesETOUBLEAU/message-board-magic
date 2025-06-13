@@ -68,20 +68,21 @@ const UserDashboard = () => {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#E6F3FF' }}>
       <div className="container mx-auto px-4 py-8">
-        {/* Logo */}
-        <div className="absolute top-4 right-4 z-10">
+        {/* Logo and Logout positioned separately */}
+        <div className="absolute top-4 right-4 z-10 flex flex-col items-end gap-4">
           <img 
             src="/ChatGPT Image 13 juin 2025, 15_24_09.png" 
             alt="Logo" 
-            className="h-12 w-auto"
+            className="h-48 w-auto"
             onError={(e) => {
               console.error('Logo failed to load:', e);
               e.currentTarget.style.display = 'none';
             }}
           />
+          <DashboardHeader userName={user.name} onLogout={logout} showOnlyLogout={true} />
         </div>
 
-        <DashboardHeader userName={user.name} onLogout={logout} />
+        <DashboardHeader userName={user.name} onLogout={logout} showOnlyTitle={true} />
         <div className="grid md:grid-cols-2 gap-8">
           <MessageForm user={user} onMessageSent={handleMessageSent} />
           <MessagesList messages={messages} />
