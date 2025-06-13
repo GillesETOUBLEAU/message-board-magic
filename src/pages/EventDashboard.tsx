@@ -147,7 +147,6 @@ const EventDashboard = () => {
       <div className="container mx-auto px-4 py-8">
         {/* Logo and Logout positioned in upper right corner */}
         <div className="absolute top-6 right-6 z-10 flex items-start gap-4">
-          <DashboardHeader userName={user.name} onLogout={logout} showOnlyLogout={true} />
           <img 
             src="/ChatGPT Image 13 juin 2025, 15_24_09.png" 
             alt="Logo" 
@@ -157,6 +156,7 @@ const EventDashboard = () => {
               e.currentTarget.style.display = 'none';
             }}
           />
+          <DashboardHeader userName={user.name} onLogout={logout} showOnlyLogout={true} />
         </div>
 
         {/* Main title with more top margin */}
