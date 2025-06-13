@@ -10,6 +10,7 @@ import AdminAuthForm from "@/components/AdminAuthForm";
 import MessageManager from "@/components/MessageManager";
 import ProjectionSettingsPanel from "@/components/ProjectionSettingsPanel";
 import EventManager from "@/components/EventManager";
+import EventSwitcher from "@/components/EventSwitcher";
 
 const EventAdmin = () => {
   const { eventSlug } = useParams();
@@ -52,8 +53,23 @@ const EventAdmin = () => {
   };
 
   const logout = async () => {
-    await supabase.auth.signOut();
-    setIsAdmin(false);
+    try {
+      await supabase.auth.signOut();
+      setIsAdmin(false);
+      navigate('/');
+      toast.success("Logged out successfully");
+    } catch (error) {
+      toast.error("Failed to logout");
+    }
+  };
+
+  const handleAllEventsClick = () => {
+    navigate('/events');
+  };
+
+  const handleEventSwitch = (event: any) => {
+    setCurrentEvent(event);
+    navigate(`/event/${event.slug}/admin`);
   };
 
   if (loading) {
@@ -148,13 +164,22 @@ const EventAdmin = () => {
             >
               Open Projection
             </Button>
-            <Button onClick={() => navigate('/')} variant="outline">
+            <Button onClick={handleAllEventsClick} variant="outline">
               All Events
             </Button>
             <Button onClick={logout} variant="outline">
               Logout
             </Button>
           </div>
+        </div>
+
+        {/* Event Switcher */}
+        <div className="mb-6">
+          <EventSwitcher 
+            currentEvent={currentEvent}
+            events={events}
+            onEventSwitch={handleEventSwitch}
+          />
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
