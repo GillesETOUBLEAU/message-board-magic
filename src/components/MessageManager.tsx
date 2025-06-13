@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -147,12 +148,6 @@ const MessageManager = () => {
 
   return (
     <div className="space-y-6">
-      <div className="mb-4">
-        <h2 className="text-lg font-semibold text-gray-800">
-          Managing: {currentEvent.name}
-        </h2>
-      </div>
-
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">

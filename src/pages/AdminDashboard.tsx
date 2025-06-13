@@ -59,8 +59,8 @@ const AdminDashboard = () => {
           />
         </div>
 
-        {/* Header with more top margin to account for larger logo */}
-        <div className="flex justify-between items-center mb-8 mt-16">
+        {/* Header with proper spacing from logo */}
+        <div className="flex justify-between items-center mb-6 mt-32">
           <div>
             <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
             <p className="text-gray-600">Manage workshop messages and settings</p>
