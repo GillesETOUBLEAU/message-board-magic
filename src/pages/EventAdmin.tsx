@@ -102,7 +102,7 @@ const EventAdmin = () => {
           </div>
 
           {/* Header with more top margin to account for larger logo */}
-          <div className="flex justify-between items-center mb-8 mt-16">
+          <div className="flex justify-between items-center mb-8 mt-24">
             <div>
               <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
               <p className="text-gray-600">Manage events and settings</p>
@@ -134,7 +134,7 @@ const EventAdmin = () => {
         </div>
 
         {/* Header with more top margin to account for larger logo */}
-        <div className="flex justify-between items-center mb-8 mt-16">
+        <div className="flex justify-between items-center mb-8 mt-24">
           <div>
             <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
             <p className="text-gray-600">Managing: {currentEvent.name}</p>
