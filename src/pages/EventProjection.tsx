@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { supabase } from "@/integrations/supabase/client";
@@ -36,6 +37,7 @@ const EventProjection = () => {
     sticky_note_colors: ['#fef3c7', '#fce7f3', '#dbeafe', '#d1fae5', '#fed7d7']
   });
   const [displayedMessages, setDisplayedMessages] = useState<MessageWithColor[]>([]);
+  const [displayedMessageIds, setDisplayedMessageIds] = useState<Set<string>>(new Set());
   const qrCanvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -71,13 +73,13 @@ const EventProjection = () => {
       console.log('EventProjection: Loading data for event:', currentEvent.name, 'ID:', currentEvent.id);
       
       const loadData = async () => {
-        // Load approved messages from Supabase for this event
+        // Load approved messages from Supabase for this event - order by created_at ASC for proper display order
         const { data: messagesData, error: messagesError } = await supabase
           .from('messages')
           .select('*')
           .eq('event_id', currentEvent.id)
           .eq('status', 'approved')
-          .order('created_at', { ascending: false });
+          .order('created_at', { ascending: true });
         
         if (messagesError) {
           console.error('Error loading messages:', messagesError);
@@ -123,20 +125,37 @@ const EventProjection = () => {
   }, [currentEvent]);
 
   useEffect(() => {
-    if (messages.length > displayedMessages.length) {
-      const timer = setTimeout(() => {
-        const newMessage = messages[displayedMessages.length];
-        const assignedColor = getDistributedColor(displayedMessages.length);
-        
-        setDisplayedMessages(prev => [
-          ...prev,
-          { ...newMessage, color: assignedColor }
-        ]);
-      }, 1000);
+    // Find new messages that haven't been displayed yet
+    const newMessages = messages.filter(message => !displayedMessageIds.has(message.id));
+    
+    if (newMessages.length > 0) {
+      // Add new messages one by one with animation timing
+      let messageIndex = 0;
       
-      return () => clearTimeout(timer);
+      const addNextMessage = () => {
+        if (messageIndex < newMessages.length) {
+          const newMessage = newMessages[messageIndex];
+          const assignedColor = getDistributedColor(displayedMessages.length + messageIndex);
+          
+          setDisplayedMessages(prev => [
+            ...prev,
+            { ...newMessage, color: assignedColor }
+          ]);
+          
+          setDisplayedMessageIds(prev => new Set([...prev, newMessage.id]));
+          
+          messageIndex++;
+          
+          if (messageIndex < newMessages.length) {
+            setTimeout(addNextMessage, 1000);
+          }
+        }
+      };
+      
+      // Start adding messages with a delay
+      setTimeout(addNextMessage, 1000);
     }
-  }, [messages, displayedMessages]);
+  }, [messages, displayedMessageIds]);
 
   const getDistributedColor = (index: number) => {
     const availableColors = settings.sticky_note_colors.filter(color => 
