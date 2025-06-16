@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { supabase } from "@/integrations/supabase/client";
+import { useMessageDisplay } from "@/hooks/useMessageDisplay";
 import ProjectionLogo from "@/components/ProjectionLogo";
 import ProjectionFooter from "@/components/ProjectionFooter";
 
@@ -11,6 +12,7 @@ interface Message {
   author_email: string;
   status: 'pending' | 'approved' | 'rejected';
   created_at: string;
+  event_id: string;
 }
 
 interface ProjectionSettings {
@@ -18,10 +20,6 @@ interface ProjectionSettings {
   background_color: string;
   font_size: number;
   sticky_note_colors: string[];
-}
-
-interface MessageWithColor extends Message {
-  color: string;
 }
 
 const Projection = () => {
@@ -32,16 +30,17 @@ const Projection = () => {
     font_size: 18,
     sticky_note_colors: ['#fef3c7', '#fce7f3', '#dbeafe', '#d1fae5', '#fed7d7']
   });
-  const [displayedMessages, setDisplayedMessages] = useState<MessageWithColor[]>([]);
+
+  const { displayedMessages } = useMessageDisplay(messages, settings);
 
   useEffect(() => {
     const loadData = async () => {
-      // Load approved messages from Supabase
+      // Load approved messages from Supabase - order by created_at ASC for proper display order
       const { data: messagesData, error: messagesError } = await supabase
         .from('messages')
         .select('*')
         .eq('status', 'approved')
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: true });
       
       if (messagesError) {
         console.error('Error loading messages:', messagesError);
@@ -74,38 +73,6 @@ const Projection = () => {
     
     return () => clearInterval(interval);
   }, []);
-
-  useEffect(() => {
-    // Animate in new messages one by one with fixed colors
-    if (messages.length > displayedMessages.length) {
-      const timer = setTimeout(() => {
-        const newMessage = messages[displayedMessages.length];
-        const assignedColor = getDistributedColor(displayedMessages.length);
-        
-        setDisplayedMessages(prev => [
-          ...prev,
-          { ...newMessage, color: assignedColor }
-        ]);
-      }, 1000);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [messages, displayedMessages]);
-
-  const getDistributedColor = (index: number) => {
-    // Filter out colors that are too similar to the background
-    const availableColors = settings.sticky_note_colors.filter(color => 
-      color.toLowerCase() !== settings.background_color.toLowerCase()
-    );
-    
-    // If no colors are available (shouldn't happen), use a default
-    if (availableColors.length === 0) {
-      return '#fef3c7'; // Default yellow
-    }
-    
-    // Distribute colors evenly to maximize variety
-    return availableColors[index % availableColors.length];
-  };
 
   const getGridPosition = (index: number) => {
     // Calculate grid dimensions based on total number of messages
