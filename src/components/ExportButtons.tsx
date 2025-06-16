@@ -48,32 +48,6 @@ const ExportButtons = ({ messages, eventSlug }: ExportButtonsProps) => {
     toast.success("CSV file downloaded successfully!");
   };
 
-  const downloadXLSX = () => {
-    if (messages.length === 0) {
-      toast.error("No approved messages to download");
-      return;
-    }
-
-    const header = 'Name\tEmail\tMessage\tDate\n';
-    const data = messages.map(message => {
-      const date = new Date(message.created_at).toLocaleDateString();
-      return `${message.author_name}\t${message.author_email}\t${message.content}\t${date}`;
-    }).join('\n');
-
-    const content = header + data;
-    const blob = new Blob([content], { type: 'application/vnd.ms-excel;charset=utf-8;' });
-    const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
-    link.setAttribute('href', url);
-    link.setAttribute('download', `approved_messages_${eventSlug}_${new Date().toISOString().split('T')[0]}.xlsx`);
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    
-    toast.success("XLSX file downloaded successfully!");
-  };
-
   return (
     <div className="flex gap-2">
       <Button
@@ -83,14 +57,6 @@ const ExportButtons = ({ messages, eventSlug }: ExportButtonsProps) => {
       >
         <Download className="h-4 w-4 mr-2" />
         CSV
-      </Button>
-      <Button
-        size="sm"
-        onClick={downloadXLSX}
-        className="bg-green-600 hover:bg-green-700"
-      >
-        <Download className="h-4 w-4 mr-2" />
-        XLSX
       </Button>
     </div>
   );
