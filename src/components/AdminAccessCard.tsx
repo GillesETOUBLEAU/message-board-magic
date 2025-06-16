@@ -15,7 +15,7 @@ const AdminAccessCard = () => {
           <div className="p-1.5 bg-slate-50 rounded-md">
             <Shield className="h-4 w-4 text-slate-400" />
           </div>
-          Event Organizer
+          Access Dashboard
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-0">
