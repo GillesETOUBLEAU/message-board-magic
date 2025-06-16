@@ -40,12 +40,12 @@ const Index = () => {
           <div className="border-t border-slate-200 pt-12">
             <div className="flex flex-col items-center">
               <div className="text-center mb-6">
-                <h3 className="text-lg font-medium text-slate-700 mb-2 flex items-center justify-center gap-2">
-                  <Settings className="h-5 w-5" />
+                <h3 className="text-base font-normal text-slate-500 mb-2 flex items-center justify-center gap-2">
+                  <Settings className="h-4 w-4" />
                   Event Organizer?
                 </h3>
-                <p className="text-sm text-slate-500">
-                  Access admin dashboard to manage workshops
+                <p className="text-sm text-slate-400">
+                  Manage workshops from dashboard
                 </p>
               </div>
               <div className="w-full max-w-xs">
