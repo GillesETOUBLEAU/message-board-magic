@@ -22,10 +22,10 @@ const Index = () => {
           {/* Hero Section for Participants */}
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
-              Join Your Workshop
+              Welcome to Your Workshop
             </h1>
             <p className="text-xl text-slate-600 mb-8 max-w-2xl mx-auto">
-              Enter your access code to participate in an interactive workshop experience
+              Ready to participate? Enter your access code below to get started
             </p>
           </div>
 

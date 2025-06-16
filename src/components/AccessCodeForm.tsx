@@ -51,9 +51,6 @@ const AccessCodeForm = () => {
           </div>
           Join Workshop
         </CardTitle>
-        <p className="text-slate-600 mt-3">
-          Enter your access code to participate in a workshop
-        </p>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
