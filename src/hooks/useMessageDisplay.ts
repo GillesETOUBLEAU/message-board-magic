@@ -24,7 +24,7 @@ interface ProjectionSettings {
 
 export const useMessageDisplay = (messages: Message[], settings: ProjectionSettings) => {
   const [displayedMessages, setDisplayedMessages] = useState<MessageWithColor[]>([]);
-  const [displayedMessageIds, setDisplayedMessageIds] = useState<Set<string>>(new Set());
+  const [isInitialized, setIsInitialized] = useState(false);
 
   const getDistributedColor = (index: number) => {
     const availableColors = settings.sticky_note_colors.filter(color => 
@@ -39,37 +39,47 @@ export const useMessageDisplay = (messages: Message[], settings: ProjectionSetti
   };
 
   useEffect(() => {
-    // Find new messages that haven't been displayed yet
-    const newMessages = messages.filter(message => !displayedMessageIds.has(message.id));
-    
-    if (newMessages.length > 0) {
-      // Add new messages one by one with animation timing
-      let messageIndex = 0;
+    if (!isInitialized && messages.length > 0) {
+      // Initial load: display all existing messages immediately
+      const messagesWithColors = messages.map((message, index) => ({
+        ...message,
+        color: getDistributedColor(index)
+      }));
       
-      const addNextMessage = () => {
-        if (messageIndex < newMessages.length) {
-          const newMessage = newMessages[messageIndex];
-          const assignedColor = getDistributedColor(displayedMessages.length + messageIndex);
-          
-          setDisplayedMessages(prev => [
-            ...prev,
-            { ...newMessage, color: assignedColor }
-          ]);
-          
-          setDisplayedMessageIds(prev => new Set([...prev, newMessage.id]));
-          
-          messageIndex++;
-          
+      setDisplayedMessages(messagesWithColors);
+      setIsInitialized(true);
+    } else if (isInitialized) {
+      // Handle new messages after initial load
+      const currentIds = new Set(displayedMessages.map(m => m.id));
+      const newMessages = messages.filter(message => !currentIds.has(message.id));
+      
+      if (newMessages.length > 0) {
+        // Add new messages one by one with animation
+        let messageIndex = 0;
+        
+        const addNextMessage = () => {
           if (messageIndex < newMessages.length) {
-            setTimeout(addNextMessage, 1000);
+            const newMessage = newMessages[messageIndex];
+            const totalIndex = displayedMessages.length + messageIndex;
+            const assignedColor = getDistributedColor(totalIndex);
+            
+            setDisplayedMessages(prev => [
+              ...prev,
+              { ...newMessage, color: assignedColor }
+            ]);
+            
+            messageIndex++;
+            
+            if (messageIndex < newMessages.length) {
+              setTimeout(addNextMessage, 1000);
+            }
           }
-        }
-      };
-      
-      // Start adding messages with a delay
-      setTimeout(addNextMessage, 1000);
+        };
+        
+        setTimeout(addNextMessage, 1000);
+      }
     }
-  }, [messages, displayedMessageIds, displayedMessages.length, settings.sticky_note_colors, settings.background_color]);
+  }, [messages, isInitialized, settings.sticky_note_colors, settings.background_color]);
 
   return { displayedMessages };
 };
