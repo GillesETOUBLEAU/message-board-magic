@@ -49,7 +49,6 @@ const AccessCodeForm = () => {
           <div className="p-2 bg-blue-100 rounded-lg">
             <Users className="h-6 w-6 text-blue-600" />
           </div>
-          Join Workshop
         </CardTitle>
       </CardHeader>
       <CardContent>
