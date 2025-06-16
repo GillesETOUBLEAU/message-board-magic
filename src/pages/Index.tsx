@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Building2 } from 'lucide-react';
+import { Building2, Settings } from 'lucide-react';
 import AccessCodeForm from '@/components/AccessCodeForm';
 import AdminAccessCard from '@/components/AdminAccessCard';
 
@@ -16,35 +16,41 @@ const Index = () => {
         />
       </div>
 
-      {/* Main Access Section */}
-      <div className="container mx-auto px-6 py-20">
-        <div className="max-w-6xl mx-auto">
-          <div className="mb-16 text-center">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">Choose Your Access Method</h2>
-            <p className="text-slate-600 text-lg">Join a workshop or manage events</p>
+      {/* Main Content */}
+      <div className="container mx-auto px-6 py-16">
+        <div className="max-w-4xl mx-auto">
+          {/* Hero Section for Participants */}
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
+              Join Your Workshop
+            </h1>
+            <p className="text-xl text-slate-600 mb-8 max-w-2xl mx-auto">
+              Enter your access code to participate in an interactive workshop experience
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
-            {/* Attendee Access */}
-            <div className="flex flex-col items-center">
-              <div className="mb-6">
-                <h3 className="text-xl font-semibold text-slate-900 mb-2 text-center">Workshop Participant</h3>
-                <p className="text-slate-600 text-center">
-                  Have an access code? Join your workshop here
-                </p>
-              </div>
+          {/* Main Access Form - Centered */}
+          <div className="flex justify-center mb-16">
+            <div className="w-full max-w-md">
               <AccessCodeForm />
             </div>
+          </div>
 
-            {/* Admin Access */}
+          {/* Secondary Admin Access - Smaller and Less Prominent */}
+          <div className="border-t border-slate-200 pt-12">
             <div className="flex flex-col items-center">
-              <div className="mb-6">
-                <h3 className="text-xl font-semibold text-slate-900 mb-2 text-center">Event Administrator</h3>
-                <p className="text-slate-600 text-center">
-                  Manage workshops and view all events
+              <div className="text-center mb-6">
+                <h3 className="text-lg font-medium text-slate-700 mb-2 flex items-center justify-center gap-2">
+                  <Settings className="h-5 w-5" />
+                  Event Organizer?
+                </h3>
+                <p className="text-sm text-slate-500">
+                  Access admin dashboard to manage workshops
                 </p>
               </div>
-              <AdminAccessCard />
+              <div className="w-full max-w-xs">
+                <AdminAccessCard />
+              </div>
             </div>
           </div>
         </div>
