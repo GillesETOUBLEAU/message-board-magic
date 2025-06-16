@@ -1,6 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { supabase } from "@/integrations/supabase/client";
+import ProjectionLogo from "@/components/ProjectionLogo";
+import ProjectionFooter from "@/components/ProjectionFooter";
 
 interface Message {
   id: string;
@@ -139,18 +141,7 @@ const Projection = () => {
         aspectRatio: '16/9'
       }}
     >
-      {/* Logo */}
-      <div className="absolute top-4 right-4 z-20">
-        <img 
-          src="/ChatGPT Image 13 juin 2025, 15_24_09.png" 
-          alt="Logo" 
-          className="h-48 w-auto"
-          onError={(e) => {
-            console.error('Logo failed to load:', e);
-            e.currentTarget.style.display = 'none';
-          }}
-        />
-      </div>
+      <ProjectionLogo />
 
       {/* Header */}
       <div className="absolute top-8 left-8 right-8 text-center z-10">
@@ -191,12 +182,7 @@ const Projection = () => {
         })}
       </div>
 
-      {/* Footer */}
-      <div className="absolute bottom-8 left-8 right-8 text-center">
-        <p className="text-lg text-gray-600">
-          Keep the ideas coming! 💡
-        </p>
-      </div>
+      <ProjectionFooter />
 
       {/* CSS Animation */}
       <style>
