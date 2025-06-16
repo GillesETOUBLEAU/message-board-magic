@@ -21,7 +21,7 @@ const ProjectionHeader = ({ currentEvent, title, messageCount }: ProjectionHeade
   useEffect(() => {
     if (currentEvent && qrCanvasRef.current) {
       // Generate QR code for the event dashboard
-      const eventUrl = `${window.location.origin}/event/${currentEvent.slug}`;
+      const eventUrl = `${window.location.origin}/event/${currentEvent.slug}/dashboard`;
       QRCode.toCanvas(qrCanvasRef.current, eventUrl, {
         width: 120,
         margin: 1,
