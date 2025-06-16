@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Building2, Settings } from 'lucide-react';
+import { Building2, Settings, Mail } from 'lucide-react';
 import AccessCodeForm from '@/components/AccessCodeForm';
 import AdminAccessCard from '@/components/AdminAccessCard';
 
@@ -59,9 +59,20 @@ const Index = () => {
       {/* Footer */}
       <div className="bg-white/80 backdrop-blur-sm border-t border-slate-200 mt-auto">
         <div className="container mx-auto px-6 py-8">
-          <div className="text-center text-slate-500 text-sm">
-            <Building2 className="h-4 w-4 inline mr-2" />
-            Professional Workshop Management Platform
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="text-center md:text-left text-slate-500 text-sm">
+              <Building2 className="h-4 w-4 inline mr-2" />
+              Professional Workshop Management Platform
+            </div>
+            <div className="text-center md:text-right">
+              <a 
+                href="mailto:contact@livesticky.fr"
+                className="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 transition-colors duration-200 bg-white/60 hover:bg-white/80 px-4 py-2 rounded-lg border border-slate-200 hover:border-blue-300 shadow-sm hover:shadow-md"
+              >
+                <Mail className="h-4 w-4" />
+                Contact Us
+              </a>
+            </div>
           </div>
         </div>
       </div>
