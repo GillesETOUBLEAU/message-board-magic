@@ -26,7 +26,7 @@ const AdminAccessCard = () => {
             size="sm"
           >
             <Settings className="mr-2 h-3 w-3" />
-            Dashboard
+            Login
           </Button>
         </div>
         <div className="mt-3 text-center">
