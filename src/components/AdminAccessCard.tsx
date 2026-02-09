@@ -21,7 +21,7 @@ const AdminAccessCard = () => {
       <CardContent className="pt-0">
         <div className="space-y-3">
           <Button 
-            onClick={() => navigate('/events')}
+            onClick={() => navigate('/admin')}
             className="w-full bg-slate-500 hover:bg-slate-600 text-white font-normal py-2 text-sm shadow-sm hover:shadow-md transition-all duration-200"
             size="sm"
           >

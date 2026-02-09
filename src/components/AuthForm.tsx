@@ -20,7 +20,9 @@ const AuthForm = ({ onAuth }: AuthFormProps) => {
   const [accessCode, setAccessCode] = useState(searchParams.get('code') || '');
   const [isValidatingCode, setIsValidatingCode] = useState(false);
 
-  const needsAccessCode = currentEvent?.access_mode === 'code_protected';
+  // Access code already validated if passed via URL params (from AccessCodeForm)
+  const codeFromUrl = searchParams.get('code');
+  const needsAccessCode = currentEvent?.access_mode === 'code_protected' && !codeFromUrl;
 
   const validateAccessCode = async (code: string): Promise<boolean> => {
     if (!currentEvent || !needsAccessCode || !code.trim()) return false;
