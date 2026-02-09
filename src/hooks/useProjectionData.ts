@@ -52,7 +52,7 @@ export const useProjectionData = (currentEvent: Event | null) => {
           console.error('Error loading messages:', messagesError);
         } else {
           console.log('useProjectionData: Loaded messages:', messagesData?.length || 0);
-          setMessages(messagesData || []);
+          setMessages((messagesData || []) as Message[]);
         }
 
         // Load projection settings from Supabase for this event

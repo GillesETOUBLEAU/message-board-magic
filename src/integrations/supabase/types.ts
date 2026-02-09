@@ -14,16 +14,251 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      event_access_attempts: {
+        Row: {
+          attempted_code: string
+          created_at: string
+          event_id: string
+          id: string
+          success: boolean
+          user_email: string | null
+          user_name: string | null
+        }
+        Insert: {
+          attempted_code: string
+          created_at?: string
+          event_id: string
+          id?: string
+          success?: boolean
+          user_email?: string | null
+          user_name?: string | null
+        }
+        Update: {
+          attempted_code?: string
+          created_at?: string
+          event_id?: string
+          id?: string
+          success?: boolean
+          user_email?: string | null
+          user_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_access_attempts_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      events: {
+        Row: {
+          access_code: string
+          access_mode: string
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          name: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          access_code: string
+          access_mode?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          access_code?: string
+          access_mode?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      messages: {
+        Row: {
+          author_email: string
+          author_name: string
+          content: string
+          created_at: string
+          event_id: string
+          id: string
+          status: string
+        }
+        Insert: {
+          author_email: string
+          author_name: string
+          content: string
+          created_at?: string
+          event_id: string
+          id?: string
+          status?: string
+        }
+        Update: {
+          author_email?: string
+          author_name?: string
+          content?: string
+          created_at?: string
+          event_id?: string
+          id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          name: string | null
+          role: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id: string
+          name?: string | null
+          role?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          name?: string | null
+          role?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      projection_settings: {
+        Row: {
+          background_color: string | null
+          created_at: string
+          event_id: string
+          font_size: number | null
+          id: string
+          sticky_note_colors: Json | null
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          background_color?: string | null
+          created_at?: string
+          event_id: string
+          font_size?: number | null
+          id?: string
+          sticky_note_colors?: Json | null
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          background_color?: string | null
+          created_at?: string
+          event_id?: string
+          font_size?: number | null
+          id?: string
+          sticky_note_colors?: Json | null
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "projection_settings_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      workshop_users: {
+        Row: {
+          created_at: string
+          email: string
+          event_id: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          event_id?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          event_id?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workshop_users_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +385,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+    },
   },
 } as const

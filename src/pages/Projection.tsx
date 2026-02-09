@@ -45,7 +45,7 @@ const Projection = () => {
       if (messagesError) {
         console.error('Error loading messages:', messagesError);
       } else {
-        setMessages(messagesData || []);
+        setMessages((messagesData || []) as Message[]);
       }
 
       // Load projection settings from Supabase

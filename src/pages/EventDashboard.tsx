@@ -65,7 +65,7 @@ const EventDashboard = () => {
       return;
     }
     
-    setMessages(data || []);
+    setMessages((data || []) as Message[]);
   };
 
   const handleAuth = (userData: { name: string; email: string }) => {
