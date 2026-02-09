@@ -41,7 +41,7 @@ const MessageManager = () => {
       return;
     }
     
-    setMessages(data || []);
+    setMessages((data || []) as Message[]);
   };
 
   const updateMessageStatus = async (messageId: string, status: 'approved' | 'rejected') => {

@@ -38,13 +38,14 @@ const EventAdmin = () => {
   const checkAdminStatus = async () => {
     if (!user) return;
     
-    const { data: profile } = await supabase
-      .from('profiles')
+    const { data } = await supabase
+      .from('user_roles')
       .select('role')
-      .eq('id', user.id)
-      .single();
+      .eq('user_id', user.id)
+      .eq('role', 'admin')
+      .maybeSingle();
     
-    if (profile?.role === 'admin') {
+    if (data) {
       setIsAdmin(true);
     } else {
       toast.error("Access denied. Admin role required.");
